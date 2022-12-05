@@ -13,7 +13,7 @@ namespace MultiAuthenticationAppAPI.Entities
                 .NotEmpty()
                 .MinimumLength(7);
             RuleFor(x => x.Answer).NotEmpty();
-            RuleFor(x => x.Authcode).NotEmpty();
+
             RuleFor(x => x.MobilePassword).NotEmpty().MinimumLength(4);
             RuleFor(x => x.Question).NotEmpty();
             RuleFor(x => x.UserName).NotEmpty();

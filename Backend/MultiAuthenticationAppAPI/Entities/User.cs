@@ -15,8 +15,8 @@ namespace MultiAuthenticationAppAPI.Entities
         public string Question { get; set; }
         [Required]
         public string Answer { get; set; }
-        public string Authcode { get; set; }
-        [Required]
+        public string? Authcode { get; set; }
+ 
         public string MobilePassword { get; set; }
     }
 }
