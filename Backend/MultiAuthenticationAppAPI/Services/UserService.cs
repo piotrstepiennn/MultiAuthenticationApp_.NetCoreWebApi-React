@@ -15,6 +15,8 @@ namespace MultiAuthenticationAppAPI.Services
     {
         void RegisterUser(User user);
         string GenerateJwt(LoginDto dto);
+        string GetAuthQuestion(LoginDto dto);
+        void GenerateAuthCodes(LoginDto dto);
     }
 
     public class UserService : IUserService
@@ -28,6 +30,27 @@ namespace MultiAuthenticationAppAPI.Services
             _dbContext = dbContext;
             _passwordHasher = passwordHasher;
             _authenticationSettings = authenticationSettings;
+        }
+
+        public void GenerateAuthCodes(LoginDto dto)
+        {
+            var user = _dbContext.Users.FirstOrDefault(u => u.UserName == dto.UserName);
+            if (user is null)
+            {
+                throw new BadRequestException("Invalid Username or password");
+            }
+
+            string mobileAuthCode = GenerateRandomNumber(1000, 9999).ToString();
+            string emailAuthCode = GenerateRandomNumber(1000, 9999).ToString();
+
+            user.EmailAuthcode = emailAuthCode;
+            user.MobileAppAuthcode = mobileAuthCode;
+
+            _dbContext.Users.Update(user);
+            _dbContext.SaveChanges();
+
+            // TODO: mobileauthcode jednoczesnie bedzie numerkami dodatkowego hasla uwierzytelniajacego, napisac o tym wiadomosc w emailu.
+            // ponizej dodac wysylanie emaili
         }
 
         public string GenerateJwt(LoginDto dto)
@@ -62,6 +85,18 @@ namespace MultiAuthenticationAppAPI.Services
             return tokenHandler.WriteToken(token);
         }
 
+        public string GetAuthQuestion(LoginDto dto)
+        {
+            var user = _dbContext.Users.FirstOrDefault(u => u.UserName == dto.UserName);
+            if (user is null)
+            {
+                throw new BadRequestException("Invalid Username or password");
+            }
+
+            var authQuestion = user.Question;
+            return authQuestion;
+        }
+
         public void RegisterUser(User user)
         {
             var hashedPassword = _passwordHasher.HashPassword(user,user.Password);
@@ -72,5 +107,12 @@ namespace MultiAuthenticationAppAPI.Services
             _dbContext.Users.Add(user);
             _dbContext.SaveChanges();
         }
+
+        private static int GenerateRandomNumber(int _min, int _max)
+        {
+            Random _rdm = new Random();
+            return _rdm.Next(_min, _max);
+        }
+
     }
 }

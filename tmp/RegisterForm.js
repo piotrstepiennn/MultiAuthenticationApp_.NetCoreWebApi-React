@@ -3,29 +3,21 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { SingleFormRow } from "./SingleFormRow";
 import { useSelector, useDispatch, useStore } from "react-redux";
-import { registerUser } from "../features/userSlice";
+import axios from "../api/axios";
 
 const RegisterForm = ({ Title }) => {
   useEffect(() => {
     document.title = Title;
   }, [Title]);
 
-  const { registerError } = useSelector((store) => store.user);
-  const dispatch = useDispatch();
+  const { user, isLoading } = useSelector((store) => store.user);
+  //const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  // useEffect(() => {
-  //   if (user) {
-  //     navigate("/");
-  //   }
-  // }, [user, navigate]);
-
   const initialState = {
     username: "",
     password: "",
     confirmPassword: "",
     mobilePassword: "",
-    authPassword: "",
     email: "",
     question: "car",
     answer: "",
@@ -59,82 +51,67 @@ const RegisterForm = ({ Title }) => {
       password,
       confirmPassword,
       mobilePassword,
-      authPassword,
       email,
       question,
       answer,
     } = values;
     e.preventDefault();
 
-    // const user = {
-    //   username: username,
-    //   password: password,
-    //   mobilePassword: mobilePassword,
-    //   email: email,
-    //   question: question,
-    //   answer: answer,
-    // };
-
-    if (password !== confirmPassword) {
+    const user = {
+      username: username,
+      password: password,
+      mobilePassword: mobilePassword,
+      email: email,
+      question: question,
+      answer: answer,
+    };
+    try {
+      if (password !== confirmPassword) {
+        setValues({
+          ...values,
+          errorMsg: "Password confirmation does not match.",
+          isError: true,
+        });
+        return;
+      }
+      const resp = await axios.post("/register", user);
       setValues({
         ...values,
-        errorMsg: "Password confirmation does not match.",
+        errorMsg:
+          "Account Created! You're going to be redirected to login page in 5 sec.",
         isError: true,
       });
-      return;
+      setTimeout(() => {
+        navigate("/");
+      }, 5000);
+    } catch (error) {
+      console.log(error);
+      if (error.code === "ERR_NETWORK") {
+        setValues({
+          ...values,
+          errorMsg: "Unexpected Error occured, try again.",
+          isError: true,
+        });
+      } else {
+        setValues({
+          ...values,
+          errorMsg: error.response.data.title,
+          isError: true,
+        });
+      }
     }
 
-    dispatch(
-      registerUser({
-        username: username,
-        password: password,
-        mobilePassword: mobilePassword,
-        authPassword: authPassword,
-        email: email,
-        question: question,
-        answer: answer,
-      })
-    );
-
-    if (!registerError) {
-      navigate("/");
-    }
-    // try {
-    //   if (password !== confirmPassword) {
-    //     setValues({
-    //       ...values,
-    //       errorMsg: "Password confirmation does not match.",
-    //       isError: true,
-    //     });
-    //     return;
-    //   }
-    //   const resp = await axios.post("/register", user);
-    //   setValues({
-    //     ...values,
-    //     errorMsg:
-    //       "Account Created! You're going to be redirected to login page in 5 sec.",
-    //     isError: true,
-    //   });
-    //   setTimeout(() => {
-    //     navigate("/");
-    //   }, 5000);
-    // } catch (error) {
-    //   console.log(error);
-    //   if (error.code === "ERR_NETWORK") {
-    //     setValues({
-    //       ...values,
-    //       errorMsg: "Unexpected Error occured, try again.",
-    //       isError: true,
-    //     });
-    //   } else {
-    //     setValues({
-    //       ...values,
-    //       errorMsg: error.response.data.title,
-    //       isError: true,
-    //     });
-    //   }
-    //}
-
+    // dispatch(
+    //   registerUser({
+    //     username: username,
+    //     password: password,
+    //     confirmPassword: confirmPassword,
+    //     mobilePassword: mobilePassword,
+    //     email: email,
+    //     question: question,
+    //     answer: answer,
+    //   })
+    // );
     return;
   };
 
@@ -179,14 +156,6 @@ const RegisterForm = ({ Title }) => {
           value={values.mobilePassword}
           handleChange={handleChange}
           labelText="Mobile App Password"
-        />
-
-        <SingleFormRow
-          type="password"
-          name="authPassword"
-          value={values.authPassword}
-          handleChange={handleChange}
-          labelText="Additional Auth Password"
         />
 
         <SingleFormRow

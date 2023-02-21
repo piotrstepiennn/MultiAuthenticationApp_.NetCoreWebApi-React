@@ -25,8 +25,10 @@ namespace MultiAuthenticationAppAPI.Controllers
         [HttpPost("/login")]
         public ActionResult Login([FromBody] LoginDto dto )
         {
+            _userService.GenerateAuthCodes(dto);
             string token = _userService.GenerateJwt(dto);
-            return Ok(token);
+            string authQuestion = _userService.GetAuthQuestion(dto);
+            return Ok(new { token, authQuestion });
         }
     }
 }

@@ -17,7 +17,8 @@ namespace MultiAuthenticationAppAPI.Entities
             RuleFor(x => x.MobilePassword).NotEmpty().MinimumLength(4);
             RuleFor(x => x.Question).NotEmpty();
             RuleFor(x => x.UserName).NotEmpty();
-
+            RuleFor(x => x.AuthPassword).NotEmpty();
+            
             RuleFor(x => x.Email).Custom((value, context) =>
             {
                 var emailTaken = dbContext.Users.Any(u => u.Email == value);

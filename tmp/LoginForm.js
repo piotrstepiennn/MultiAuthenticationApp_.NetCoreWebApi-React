@@ -1,18 +1,14 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useSelector, useDispatch, useStore } from "react-redux";
+import { useDispatch } from "react-redux";
 import { SingleFormRow } from "./SingleFormRow";
 import { addUserToLocalStorage } from "../features/localStorage";
-import { loginUser } from "../features/userSlice";
 
 const LoginForm = ({ Title }) => {
   useEffect(() => {
     document.title = Title;
   }, []);
-
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const initialState = {
     username: "",
@@ -22,12 +18,8 @@ const LoginForm = ({ Title }) => {
   };
 
   const [values, setValues] = useState(initialState);
-  const { user, isLoading } = useSelector((store) => store.user);
-  useEffect(() => {
-    if (user) {
-      navigate("/auth");
-    }
-  }, [user, navigate]);
+
+  const navigate = useNavigate();
   //const dispatch = useDispatch();
 
   //   useEffect(() => {
@@ -54,15 +46,6 @@ const LoginForm = ({ Title }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const { username, password } = values;
-
-    dispatch(
-      loginUser({
-        username: username,
-        password: password,
-      })
-    );
-
-    return;
   };
 
   return (

@@ -1,8 +1,11 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import RegisterForm from "./RegisterForm";
-import Auth from "./Auth";
+import AuthForm from "./AuthForm";
 import UserPanel from "./userPanel";
 import LoginForm from "./LoginForm";
+import { ToastContainer } from "react-toastify";
+import { ProtectedRoute } from "../features/ProtectedRoute";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   return (
@@ -11,11 +14,25 @@ function App() {
         <Route path="/" element={<LoginForm Title="Login" />} />
         <Route path="/register" element={<RegisterForm Title="Register" />} />
 
-        {/* <Route element={<RequireAuth />}>
-          <Route path="/Auth" element={<Auth Title="Authentication" />} />
-          <Route path="/UserPanel" element={<UserPanel Title="User Panel" />} />
-        </Route> */}
+        <Route
+          path="/auth"
+          element={
+            <ProtectedRoute>
+              <AuthForm Title="Authentication" />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/userPanel"
+          element={
+            <ProtectedRoute>
+              <UserPanel Title="User Panel" />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
+      <ToastContainer position="top-center" />
     </Router>
   );
 }
