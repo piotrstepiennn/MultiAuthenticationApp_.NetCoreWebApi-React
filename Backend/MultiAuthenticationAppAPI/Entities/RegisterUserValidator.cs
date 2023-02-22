@@ -11,13 +11,13 @@ namespace MultiAuthenticationAppAPI.Entities
                 .EmailAddress();
             RuleFor(x => x.Password)
                 .NotEmpty()
-                .MinimumLength(7);
-            RuleFor(x => x.Answer).NotEmpty();
+                .MinimumLength(7).WithMessage("Password should have at least 7 characters");
+            RuleFor(x => x.Answer).NotEmpty().WithMessage("Answer can't be empty");
 
-            RuleFor(x => x.MobilePassword).NotEmpty().MinimumLength(4);
-            RuleFor(x => x.Question).NotEmpty();
-            RuleFor(x => x.UserName).NotEmpty();
-            RuleFor(x => x.AuthPassword).NotEmpty();
+            RuleFor(x => x.MobilePassword).NotEmpty().MinimumLength(4).WithMessage("Password should have at least 4 characters");
+            RuleFor(x => x.Question).NotEmpty().WithMessage("Answer can't be empty");
+            RuleFor(x => x.UserName).NotEmpty().WithMessage("Answer can't be empty");
+            RuleFor(x => x.AuthPassword).NotEmpty().MinimumLength(9).WithMessage("Auth Password should have at least 9 characters");
             
             RuleFor(x => x.Email).Custom((value, context) =>
             {

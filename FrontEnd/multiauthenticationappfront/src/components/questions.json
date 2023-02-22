@@ -7,6 +7,10 @@
     {
       "questionType": "game",
       "longQuestion": "Favourite computer game?"
+    },
+    {
+      "questionType": "pet",
+      "longQuestion": "Your pet name?"
     }
   ]
 }

@@ -15,7 +15,10 @@ export const registerUser = createAsyncThunk(
       const resp = await axios.post("/register", data);
       return data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data.title);
+      console.log(Object.values(error.response.data.errors)[0]);
+      return thunkAPI.rejectWithValue(
+        Object.values(error.response.data.errors)[0].toString()
+      );
     }
   }
 );

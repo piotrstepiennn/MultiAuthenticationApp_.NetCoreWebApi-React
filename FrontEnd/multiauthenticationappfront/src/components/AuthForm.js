@@ -56,43 +56,43 @@ const AuthForm = ({ Title }) => {
         method="POST"
       >
         <div className="form__icon" aria-hidden="true"></div>
-        <h4>Proszę podać kod z emaila</h4>
+        <h4>Enter the code that was sent to your email</h4>
         <SingleFormRow
           type="text"
           name="kod"
           value={values.emailCode}
           handleChange={handleChange}
-          labelText="Kod Dostępu Email"
+          labelText="Email Code"
         />
-        <h4>Proszę podać kod z aplikacji mobilnej</h4>
+        <h4>Enter the code displayed on your mobile phone</h4>
         <SingleFormRow
           type="text"
           name="kod2"
           value={values.mobileAppCode}
           handleChange={handleChange}
-          labelText="Kod z Aplikacji Mobilnej"
+          labelText="MobileApp Code"
         />
-        <h4>Proszę podać odpowiednie litery hasła uwierzytelniającego</h4>
-        {/* <p>Numery liter: {{num1}} {{num2}} {{num3}} {{num4}}</p> */}
+        <h4>Enter the appropriate letters of the authentication password</h4>
+
         <SingleFormRow
           type="text"
           name="pin"
           value={values.randomPassword}
           handleChange={handleChange}
-          labelText="Litery Hasła"
+          labelText="Password Letters"
         />
-        <h4>Odpowiedz na pytanie weryfikujące</h4>
+        <h4>Answer the authentication question</h4>
         <p> {authQuestion} </p>
         <SingleFormRow
           type="text"
           name="answer"
           value={values.questionAnswer}
           handleChange={handleChange}
-          labelText="Odpowiedź"
+          labelText="Your answer"
         />
         <div className="form__spacer" aria-hidden="true"></div>
         <button type="submit" className="form__button" id="authButton">
-          Zaloguj
+          Login
         </button>
         <div className="alert_container">
           {/* {{#if message }}

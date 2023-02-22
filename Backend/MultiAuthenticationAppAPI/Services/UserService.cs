@@ -40,7 +40,7 @@ namespace MultiAuthenticationAppAPI.Services
             var user = _dbContext.Users.FirstOrDefault(u => u.UserName == dto.UserName);
             if (user is null)
             {
-                throw new BadRequestException("Invalid Username or password");
+                throw new NotFoundException("Invalid Username or password");
             }
 
             string mobileAuthCode = GenerateRandomNumber(1000, 9999).ToString();
@@ -78,7 +78,7 @@ namespace MultiAuthenticationAppAPI.Services
             var user = _dbContext.Users.FirstOrDefault(u => u.UserName == dto.UserName);
             if(user is null)
             {
-                throw new BadRequestException("Invalid Username or password");
+                throw new NotFoundException("Invalid Username or password");
             }
 
             var passwordResult = _passwordHasher.VerifyHashedPassword(user, user.Password, dto.Password);
@@ -110,7 +110,7 @@ namespace MultiAuthenticationAppAPI.Services
             var user = _dbContext.Users.FirstOrDefault(u => u.UserName == dto.UserName);
             if (user is null)
             {
-                throw new BadRequestException("Invalid Username or password");
+                throw new NotFoundException("Invalid Username or password");
             }
 
             var authQuestion = user.Question;
