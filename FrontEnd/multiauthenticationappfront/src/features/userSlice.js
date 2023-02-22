@@ -4,7 +4,7 @@ import axios from "../api/axios";
 
 const initialState = {
   isLoading: false,
-  registerError: false,
+  registered: null,
   user: null,
 };
 
@@ -44,14 +44,14 @@ const userSlice = createSlice({
       })
       .addCase(registerUser.fulfilled, (state, user) => {
         state.isLoading = false;
-        state.registerError = false;
+        state.registered = user;
         toast.success(`Hello There ${user.payload.username}`);
       })
       .addCase(registerUser.rejected, (state, { payload }) => {
         state.isLoading = false;
-        state.registerError = true;
         toast.error(payload);
       })
+      //login
       .addCase(loginUser.pending, (state) => {
         state.isLoading = true;
       })

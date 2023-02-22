@@ -1,0 +1,12 @@
+{
+  "questions": [
+    {
+      "questionType": "car",
+      "longQuestion": "Favourite car brand?"
+    },
+    {
+      "questionType": "game",
+      "longQuestion": "Favourite computer game?"
+    }
+  ]
+}

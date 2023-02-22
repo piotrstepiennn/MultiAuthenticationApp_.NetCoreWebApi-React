@@ -4,21 +4,19 @@ import { useEffect, useState } from "react";
 import { SingleFormRow } from "./SingleFormRow";
 import { useSelector, useDispatch, useStore } from "react-redux";
 import { registerUser } from "../features/userSlice";
+import data from "./questions.json";
 
 const RegisterForm = ({ Title }) => {
-  useEffect(() => {
-    document.title = Title;
-  }, [Title]);
-
-  const { registerError } = useSelector((store) => store.user);
+  const { registered } = useSelector((store) => store.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   if (user) {
-  //     navigate("/");
-  //   }
-  // }, [user, navigate]);
+  useEffect(() => {
+    document.title = Title;
+    if (registered) {
+      navigate("/");
+    }
+  }, [Title, registered, navigate]);
 
   const initialState = {
     username: "",
@@ -95,10 +93,11 @@ const RegisterForm = ({ Title }) => {
         answer: answer,
       })
     );
+    // console.log(registerError);
+    // if (registerError === false) {
+    //   navigate("/");
+    //}
 
-    if (!registerError) {
-      navigate("/");
-    }
     // try {
     //   if (password !== confirmPassword) {
     //     setValues({
@@ -205,8 +204,13 @@ const RegisterForm = ({ Title }) => {
             onChange={handleChange}
             value={values.question}
           >
-            <option value="car">Favourite car brand</option>
-            <option value="game">Favourite computer game</option>
+            {data.questions.map((question) => (
+              <option value={question.questionType} key={question.questionType}>
+                {question.longQuestion}
+              </option>
+            ))}
+            {/* <option value="car">Favourite car brand</option>
+            <option value="game">Favourite computer game</option> */}
           </select>
         </div>
 
