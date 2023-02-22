@@ -1,11 +1,21 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { SingleFormRow } from "./SingleFormRow";
-
+import { useSelector, useDispatch, useStore } from "react-redux";
+import data from "./questions.json";
 const AuthForm = ({ Title }) => {
   useEffect(() => {
     document.title = Title;
   });
+
+  const { user } = useSelector((store) => store.user);
+  let authQuestionType = user.payload.authQuestion;
+  let authQuestionObject = data.questions.filter(
+    (question) => question.questionType === authQuestionType
+  );
+  let authQuestion = authQuestionObject.map(
+    (question) => question.longQuestion
+  );
 
   const initialState = {
     emailCode: "",
@@ -72,7 +82,7 @@ const AuthForm = ({ Title }) => {
           labelText="Litery Hasła"
         />
         <h4>Odpowiedz na pytanie weryfikujące</h4>
-        {/* <p> {{Question}} </p> */}
+        <p> {authQuestion} </p>
         <SingleFormRow
           type="text"
           name="answer"
