@@ -30,5 +30,14 @@ namespace MultiAuthenticationAppAPI.Controllers
             string authQuestion = _userService.GetAuthQuestion(dto);
             return Ok(new { token, authQuestion });
         }
+
+        [HttpPost("/mobileAuth")]
+        public ActionResult MobileLogin([FromBody] MobileLoginDto dto)
+        {
+            string result = _userService.MobileLogin(dto);
+            var user = result.Split('*');
+
+            return Ok(new { UserName = user[0], MobileAppAuthcode = user[1] });
+        }
     }
 }

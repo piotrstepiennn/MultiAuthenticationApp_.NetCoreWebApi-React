@@ -23,7 +23,7 @@
             <Entry BackgroundColor="Gray" x:Name="textEmail" Text="{Binding Email,Mode=TwoWay}"></Entry>
 
             <Label Text="MobileApp Password:"></Label>
-            <Entry BackgroundColor="Gray" x:Name="textAppPassword" Text="{Binding MobileAppPassword,Mode=TwoWay}"></Entry>
+            <Entry BackgroundColor="Gray" x:Name="textAppPassword" Text="{Binding MobilePassword,Mode=TwoWay}"></Entry>
 
             <Button
                 x:Name="LoginBtn"

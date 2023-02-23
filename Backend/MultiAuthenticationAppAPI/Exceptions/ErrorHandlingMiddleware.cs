@@ -12,7 +12,7 @@
             {
                 await next.Invoke(context);
             }
-            catch(NotFoundException notFoundException)
+            catch(MultiAuthenticationAppAPI.Exceptions.NotFoundException notFoundException)
             {
                 context.Response.StatusCode = 404;
                 await context.Response.WriteAsync(notFoundException.Message);

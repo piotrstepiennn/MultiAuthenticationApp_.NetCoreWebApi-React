@@ -3,25 +3,44 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Json;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace MobileApp.Services
 {
     public class LoginService
     {
-        HttpClient httpClient;
-        public LoginService(HttpClient httpClient) 
+
+        public LoginService() 
         {
-            httpClient = new HttpClient();
+
         }
         //User user = new User();
         public async Task<User> GetUser(User user)
         {
-            var url = "https://localhost:7033/";
-            HttpContent httpContent = new StringContent(user.ToString());
-            var response = await httpClient.PostAsync(url, httpContent);
-            Console.WriteLine(response.Content);
+            using (var httpClient = new HttpClient())
+            {
+                var url = "http://10.0.2.2:5033/mobileAuth";
+                HttpContent httpContent = new StringContent(JsonSerializer.Serialize(user), Encoding.UTF8, "application/json");
+                var response = await httpClient.PostAsync(url, httpContent);
+                if (response.IsSuccessStatusCode)
+                {
+                    var json = await response.Content.ReadAsStringAsync();
+                    var deserializedJson = JsonSerializer.Deserialize<User>(json);
+                    user.mobileAppAuthcode= deserializedJson.mobileAppAuthcode;
+                    user.userName= deserializedJson.userName;
+                    Console.WriteLine("tutaj" + user);
+                }
+                else
+                {
+                    Console.WriteLine("nie istnieje");
+                    
+                    return null;
+                }
+                
+            }
             return user;
         }
     }

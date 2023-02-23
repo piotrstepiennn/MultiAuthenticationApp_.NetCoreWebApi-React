@@ -9,16 +9,23 @@ namespace MobileApp.Models
     public class User
     {
         public string Email { get; set; }   
-        public string MobileAppPassword { get; set; } 
-        public string UserNamer { get; set; }
-        public string AuthCode { get; set; }
+        public string MobilePassword { get; set; } 
+        public string userName { get; set; }
+        public string mobileAppAuthcode { get; set; }
 
         public User()
         {
             Email = "";
-            MobileAppPassword = "";
-            UserNamer = "";
-            AuthCode = "";
+            MobilePassword = "";
+            userName = "";
+            mobileAppAuthcode = "";
+        }
+        public User(string userName, string Authcode)
+        {
+            Email = "";
+            MobilePassword = "";
+            this.userName = userName;
+            this.mobileAppAuthcode = Authcode;
         }
     }
 }
