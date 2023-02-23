@@ -1,5 +1,6 @@
 ﻿using Android.App;
 using MobileApp.Services;
+using MobileApp.View;
 using MobileApp.ViewModel;
 
 namespace MobileApp;
@@ -23,7 +24,8 @@ public static class MauiProgram
 		//builder.Services.AddSingleton<CodeViewModel>();
 
 		builder.Services.AddSingleton<MainPage>();
+        builder.Services.AddSingleton<CodePage>();
 
-		return builder.Build();
+        return builder.Build();
 	}
 }

@@ -1,9 +1,12 @@
-﻿namespace MobileApp;
+﻿using MobileApp.View;
+
+namespace MobileApp;
 
 public partial class AppShell : Shell
 {
 	public AppShell()
 	{
-		InitializeComponent();
+        Routing.RegisterRoute("//CodePage", typeof(CodePage));
+        InitializeComponent();
 	}
 }

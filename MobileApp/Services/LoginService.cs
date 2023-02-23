@@ -31,13 +31,11 @@ namespace MobileApp.Services
                     var deserializedJson = JsonSerializer.Deserialize<User>(json);
                     user.mobileAppAuthcode= deserializedJson.mobileAppAuthcode;
                     user.userName= deserializedJson.userName;
-                    Console.WriteLine("tutaj" + user);
+                    
                 }
                 else
                 {
-                    Console.WriteLine("nie istnieje");
-                    
-                    return null;
+                   return null;
                 }
                 
             }

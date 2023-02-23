@@ -1,9 +1,12 @@
+using MobileApp.ViewModel;
+
 namespace MobileApp.View;
 
 public partial class CodePage : ContentPage
 {
-	public CodePage()
+	public CodePage(LoginViewModel viewModel)
 	{
 		InitializeComponent();
+		BindingContext= viewModel;
 	}
 }
