@@ -35,6 +35,18 @@ export const loginUser = createAsyncThunk(
   }
 );
 
+export const authUser = createAsyncThunk(
+  "user/authUser",
+  async (user, thunkAPI) => {
+    try {
+      const resp = await axios.post("/auth", user);
+      return resp.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+  }
+);
+
 const userSlice = createSlice({
   name: "user",
   initialState,
@@ -64,6 +76,20 @@ const userSlice = createSlice({
         toast.success(`Authenticate yourself!`);
       })
       .addCase(loginUser.rejected, (state, { payload }) => {
+        state.isLoading = false;
+        toast.error(payload);
+      })
+      //authentication
+      .addCase(authUser.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(authUser.fulfilled, (state, { payload }) => {
+        //const user = { payload };
+        state.isLoading = false;
+        //state.user = user;
+        toast.success(`Solve The Catpcha!`);
+      })
+      .addCase(authUser.rejected, (state, { payload }) => {
         state.isLoading = false;
         toast.error(payload);
       });

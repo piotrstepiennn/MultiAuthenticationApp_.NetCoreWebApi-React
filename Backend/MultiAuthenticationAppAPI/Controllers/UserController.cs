@@ -28,7 +28,8 @@ namespace MultiAuthenticationAppAPI.Controllers
             _userService.GenerateAuthCodes(dto);
             string token = _userService.GenerateJwt(dto);
             string authQuestion = _userService.GetAuthQuestion(dto);
-            return Ok(new { token, authQuestion });
+            var result = authQuestion.Split('*');
+            return Ok(new { token, authQuestion = result[0], UserName = result[1] });
         }
 
         [HttpPost("/mobileAuth")]
@@ -39,5 +40,14 @@ namespace MultiAuthenticationAppAPI.Controllers
 
             return Ok(new { UserName = user[0], MobileAppAuthcode = user[1] });
         }
+
+        [HttpPost("/auth")]
+        public ActionResult Authenticate([FromBody] AuthDto dto)
+        {
+            bool result = _userService.Authenticate(dto);
+            if (result) return Ok();
+            else return BadRequest();
+        }
+
     }
 }

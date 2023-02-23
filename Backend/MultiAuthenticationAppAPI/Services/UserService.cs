@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.IdentityModel.Tokens;
 using MultiAuthenticationAppAPI.Entities;
 using MultiAuthenticationAppAPI.Exceptions;
@@ -21,6 +22,7 @@ namespace MultiAuthenticationAppAPI.Services
         string GetAuthQuestion(LoginDto dto);
         void GenerateAuthCodes(LoginDto dto);
         string MobileLogin(MobileLoginDto dto);
+        bool Authenticate(AuthDto dto);
     }
 
     public class UserService : IUserService
@@ -114,7 +116,7 @@ namespace MultiAuthenticationAppAPI.Services
                 throw new BadRequestException("Invalid Username or password");
             }
 
-            var authQuestion = user.Question;
+            var authQuestion = user.Question + "*" + user.UserName;
             return authQuestion;
         }
 
@@ -145,11 +147,36 @@ namespace MultiAuthenticationAppAPI.Services
             return result;
         }
 
+        public bool Authenticate(AuthDto dto)
+        {
+            var user = _dbContext.Users.FirstOrDefault(u => u.UserName == dto.UserName);
+            if (user is null)
+            {
+                throw new BadRequestException("Something went wrong!");
+            }
+
+            char[] indexCharArr = user.EmailAuthcode.ToCharArray();
+            //char[] userCharArr = user.AuthPassword.ToCharArray();
+            //char[] dtoCharArr = dto.AuthPassword.ToCharArray();
+
+            for (int i = 0; i < 4; i++)
+            {
+                if (user.AuthPassword[(indexCharArr[i])] != dto.AuthPassword[(indexCharArr[i])]) return false;
+            }
+
+            if (user.EmailAuthcode == dto.EmailAuthcode && user.MobileAppAuthcode == dto.MobileAppAuthcode && user.Answer == dto.Answer)
+            {
+                return true;
+            }
+            else return false;
+        }
+
         private static int GenerateRandomNumber(int _min, int _max)
         {
             Random _rdm = new Random();
             return _rdm.Next(_min, _max);
         }
 
+        
     }
 }

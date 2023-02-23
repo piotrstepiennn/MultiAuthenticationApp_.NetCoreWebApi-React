@@ -45,6 +45,23 @@ const AuthForm = ({ Title }) => {
     }
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const { emailCode, mobileAppCode, randomPassword, questionAnswer } = values;
+
+    dispatch(
+      authUser({
+        username: user,
+        EmailAuthcode: emailCode,
+        MobileAppAuthcode: mobileAppCode,
+        AuthPassword: randomPassword,
+        Answer: questionAnswer,
+      })
+    );
+
+    return;
+  };
+
   return (
     <div>
       <h1>Authentication</h1>
@@ -52,7 +69,7 @@ const AuthForm = ({ Title }) => {
       <form
         className="authenticationForm"
         autoComplete="off"
-        action="/auth/userPanel"
+        onSubmit={handleSubmit}
         method="POST"
       >
         <div className="form__icon" aria-hidden="true"></div>
