@@ -6,6 +6,7 @@ const initialState = {
   isLoading: false,
   registered: null,
   user: null,
+  authenticated: false,
 };
 
 export const registerUser = createAsyncThunk(
@@ -39,6 +40,7 @@ export const authUser = createAsyncThunk(
   "user/authUser",
   async (user, thunkAPI) => {
     try {
+      console.log(user);
       const resp = await axios.post("/auth", user);
       return resp.data;
     } catch (error) {
@@ -86,6 +88,7 @@ const userSlice = createSlice({
       .addCase(authUser.fulfilled, (state, { payload }) => {
         //const user = { payload };
         state.isLoading = false;
+        state.authenticated = true;
         //state.user = user;
         toast.success(`Solve The Catpcha!`);
       })

@@ -1,14 +1,18 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { SingleFormRow } from "./SingleFormRow";
+import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch, useStore } from "react-redux";
+import { authUser } from "../features/userSlice";
 import data from "./questions.json";
 const AuthForm = ({ Title }) => {
   useEffect(() => {
     document.title = Title;
-  });
+  }, [Title]);
 
-  const { user } = useSelector((store) => store.user);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { user, authenticated } = useSelector((store) => store.user);
   let authQuestionType = user.payload.authQuestion;
   let authQuestionObject = data.questions.filter(
     (question) => question.questionType === authQuestionType
@@ -25,6 +29,13 @@ const AuthForm = ({ Title }) => {
     isError: false,
     errorMsg: "",
   };
+
+  useEffect(() => {
+    if (authenticated === true) {
+      console.log("navigate to custom captcha!");
+      //navigate("/auth");
+    }
+  }, [authenticated, navigate]);
 
   const [values, setValues] = useState(initialState);
 
@@ -51,7 +62,7 @@ const AuthForm = ({ Title }) => {
 
     dispatch(
       authUser({
-        username: user,
+        username: user.payload.userName,
         EmailAuthcode: emailCode,
         MobileAppAuthcode: mobileAppCode,
         AuthPassword: randomPassword,
@@ -76,7 +87,7 @@ const AuthForm = ({ Title }) => {
         <h4>Enter the code that was sent to your email</h4>
         <SingleFormRow
           type="text"
-          name="kod"
+          name="emailCode"
           value={values.emailCode}
           handleChange={handleChange}
           labelText="Email Code"
@@ -84,7 +95,7 @@ const AuthForm = ({ Title }) => {
         <h4>Enter the code displayed on your mobile phone</h4>
         <SingleFormRow
           type="text"
-          name="kod2"
+          name="mobileAppCode"
           value={values.mobileAppCode}
           handleChange={handleChange}
           labelText="MobileApp Code"
@@ -93,7 +104,7 @@ const AuthForm = ({ Title }) => {
 
         <SingleFormRow
           type="text"
-          name="pin"
+          name="randomPassword"
           value={values.randomPassword}
           handleChange={handleChange}
           labelText="Password Letters"
@@ -102,7 +113,7 @@ const AuthForm = ({ Title }) => {
         <p> {authQuestion} </p>
         <SingleFormRow
           type="text"
-          name="answer"
+          name="questionAnswer"
           value={values.questionAnswer}
           handleChange={handleChange}
           labelText="Your answer"

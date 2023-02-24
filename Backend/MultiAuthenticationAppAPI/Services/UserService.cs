@@ -46,8 +46,8 @@ namespace MultiAuthenticationAppAPI.Services
                 throw new BadRequestException("Invalid Username or password");
             }
 
-            string mobileAuthCode = GenerateRandomNumber(1000, 9999).ToString();
-            string emailAuthCode = GenerateRandomNumber(1000, 9999).ToString();
+            string mobileAuthCode = GenerateRandomNumber();
+            string emailAuthCode = GenerateRandomNumber();
 
             user.EmailAuthcode = emailAuthCode;
             user.MobileAppAuthcode = mobileAuthCode;
@@ -155,13 +155,23 @@ namespace MultiAuthenticationAppAPI.Services
                 throw new BadRequestException("Something went wrong!");
             }
 
-            char[] indexCharArr = user.EmailAuthcode.ToCharArray();
-            //char[] userCharArr = user.AuthPassword.ToCharArray();
-            //char[] dtoCharArr = dto.AuthPassword.ToCharArray();
+            if(dto.EmailAuthcode.Length != 4  || dto.AuthPassword.Length != 4  || dto.MobileAppAuthcode.Length != 4) 
+            {
+                throw new BadRequestException("Wrong data length!");
+            }
+
+            char[] tmpArr = user.EmailAuthcode.ToCharArray();
+            int[] letterIndex = new int[user.EmailAuthcode.Length]; 
+            for (int i=0; i < user.EmailAuthcode.Length; i++)
+            {
+                letterIndex[i] = Convert.ToInt32(Char.GetNumericValue(tmpArr[i]));
+            }
 
             for (int i = 0; i < 4; i++)
             {
-                if (user.AuthPassword[(indexCharArr[i])] != dto.AuthPassword[(indexCharArr[i])]) return false;
+                var test2 = user.AuthPassword[letterIndex[i] - 1];
+                var testUser = user.AuthPassword[letterIndex[i]];
+                if (user.AuthPassword[(letterIndex[i])-1] != dto.AuthPassword[i]) return false;
             }
 
             if (user.EmailAuthcode == dto.EmailAuthcode && user.MobileAppAuthcode == dto.MobileAppAuthcode && user.Answer == dto.Answer)
@@ -171,10 +181,17 @@ namespace MultiAuthenticationAppAPI.Services
             else return false;
         }
 
-        private static int GenerateRandomNumber(int _min, int _max)
+        private static string GenerateRandomNumber()
         {
             Random _rdm = new Random();
-            return _rdm.Next(_min, _max);
+            string number = "";
+            for (int i = 0; i < 4; i++)
+            {
+                int rand = _rdm.Next(1, 9);
+                number += rand;
+            }
+
+            return number;
         }
 
         
