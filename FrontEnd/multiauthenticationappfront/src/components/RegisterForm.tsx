@@ -2,13 +2,15 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { SingleFormRow } from "./SingleFormRow";
-import { useSelector, useDispatch, useStore } from "react-redux";
+//import { useSelector, useDispatch, useStore } from "react-redux";
+import { useAppSelector, useAppDispatch } from "../hooks/hooks";
 import { registerUser } from "../features/userSlice";
 import data from "./questions.json";
 
-const RegisterForm = ({ Title }) => {
-  const { registered } = useSelector((store) => store.user);
-  const dispatch = useDispatch();
+type Props = { Title: string };
+const RegisterForm = ({ Title }: Props) => {
+  const { registered } = useAppSelector((store) => store.user);
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -33,14 +35,18 @@ const RegisterForm = ({ Title }) => {
 
   const [values, setValues] = useState(initialState);
 
-  const handleChange = (e) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const name = e.target.name;
     const value = e.target.value;
     setValues({ ...values, [name]: value });
 
     const isEmpty = Object.values(values).every((x) => x === null || x === "");
     if (!isEmpty) {
-      document.getElementById("registerButton").disabled = false;
+      (
+        document.getElementById("registerButton") as HTMLButtonElement
+      ).disabled = false;
     }
     if (values.isError === true) {
       setValues({
@@ -51,7 +57,7 @@ const RegisterForm = ({ Title }) => {
     }
   };
 
-  const handleRegister = async (e) => {
+  const handleRegister = async (e: React.ChangeEvent<HTMLFormElement>) => {
     const {
       username,
       password,

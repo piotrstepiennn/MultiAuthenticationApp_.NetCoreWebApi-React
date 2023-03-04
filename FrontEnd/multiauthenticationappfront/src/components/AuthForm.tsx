@@ -2,22 +2,27 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { SingleFormRow } from "./SingleFormRow";
 import { useNavigate } from "react-router-dom";
-import { useSelector, useDispatch, useStore } from "react-redux";
+//import { useSelector, useDispatch, useStore } from "react-redux";
+import { useAppSelector, useAppDispatch } from "../hooks/hooks";
 import { authUser } from "../features/userSlice";
 import data from "./questions.json";
-const AuthForm = ({ Title }) => {
+
+type Props = { Title: string };
+
+const AuthForm = ({ Title }: Props) => {
   useEffect(() => {
     document.title = Title;
   }, [Title]);
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { user, authenticated } = useSelector((store) => store.user);
-  let authQuestionType = user.payload.authQuestion;
-  let authQuestionObject = data.questions.filter(
+  const { user, authenticated } = useAppSelector((store) => store.user);
+
+  const authQuestionType = user.payload.authQuestion;
+  const authQuestionObject = data.questions.filter(
     (question) => question.questionType === authQuestionType
   );
-  let authQuestion = authQuestionObject.map(
+  const authQuestion = authQuestionObject.map(
     (question) => question.longQuestion
   );
 
@@ -31,6 +36,7 @@ const AuthForm = ({ Title }) => {
   };
 
   useEffect(() => {
+    console.log(authenticated);
     if (authenticated === true) {
       console.log("navigate to custom captcha!");
       //navigate("/auth");
@@ -39,13 +45,14 @@ const AuthForm = ({ Title }) => {
 
   const [values, setValues] = useState(initialState);
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.name;
     const value = e.target.value;
     setValues({ ...values, [name]: value });
     const isEmpty = Object.values(values).every((x) => x === null || x === "");
     if (!isEmpty) {
-      document.getElementById("authButton").disabled = false;
+      (document.getElementById("authButton") as HTMLButtonElement).disabled =
+        false;
     }
     if (values.isError === true) {
       setValues({
@@ -56,19 +63,21 @@ const AuthForm = ({ Title }) => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
     const { emailCode, mobileAppCode, randomPassword, questionAnswer } = values;
 
-    dispatch(
-      authUser({
-        username: user.payload.userName,
-        EmailAuthcode: emailCode,
-        MobileAppAuthcode: mobileAppCode,
-        AuthPassword: randomPassword,
-        Answer: questionAnswer,
-      })
-    );
+    if (user) {
+      dispatch(
+        authUser({
+          username: user.payload.userName,
+          EmailAuthcode: emailCode,
+          MobileAppAuthcode: mobileAppCode,
+          AuthPassword: randomPassword,
+          Answer: questionAnswer,
+        })
+      );
+    }
 
     return;
   };
@@ -110,7 +119,7 @@ const AuthForm = ({ Title }) => {
           labelText="Password Letters"
         />
         <h4>Answer the authentication question</h4>
-        <p> {authQuestion} </p>
+        <p> {authQuestion ? authQuestion : "Can't load AuthQuestion!"} </p>
         <SingleFormRow
           type="text"
           name="questionAnswer"

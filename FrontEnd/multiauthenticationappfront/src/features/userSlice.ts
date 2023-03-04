@@ -2,7 +2,24 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 import axios from "../api/axios";
 
-const initialState = {
+interface initialStateTypes {
+  isLoading: boolean;
+  registered: any | null;
+  user: any | null;
+  authenticated: boolean;
+}
+
+interface user {
+  username?: string;
+  password?: string;
+  mobilePassword?: string;
+  authPassword?: string;
+  email?: string;
+  question?: string;
+  answer?: string;
+}
+
+const initialState: initialStateTypes = {
   isLoading: false,
   registered: null,
   user: null,
@@ -11,22 +28,21 @@ const initialState = {
 
 export const registerUser = createAsyncThunk(
   "user/registerUser",
-  async (data, thunkAPI) => {
+  async (data: object | null, thunkAPI: any) => {
     try {
       const resp = await axios.post("/register", data);
       return data;
-    } catch (error) {
-      console.log(Object.values(error.response.data.errors)[0]);
-      return thunkAPI.rejectWithValue(
-        Object.values(error.response.data.errors)[0].toString()
-      );
+    } catch (error: any) {
+      let err: any;
+      err = Object.values(error.response.data.errors)[0];
+      return thunkAPI.rejectWithValue(err.toString());
     }
   }
 );
 
 export const loginUser = createAsyncThunk(
   "user/loginUser",
-  async (user, thunkAPI) => {
+  async (user: object | null, thunkAPI: any) => {
     try {
       const resp = await axios.post("/login", user);
       return resp.data;
@@ -38,9 +54,8 @@ export const loginUser = createAsyncThunk(
 
 export const authUser = createAsyncThunk(
   "user/authUser",
-  async (user, thunkAPI) => {
+  async (user: object | null, thunkAPI: any) => {
     try {
-      console.log(user);
       const resp = await axios.post("/auth", user);
       return resp.data;
     } catch (error) {
@@ -52,18 +67,18 @@ export const authUser = createAsyncThunk(
 const userSlice = createSlice({
   name: "user",
   initialState,
-
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(registerUser.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(registerUser.fulfilled, (state, user) => {
+      .addCase(registerUser.fulfilled, (state, user: any) => {
         state.isLoading = false;
         state.registered = user;
-        toast.success(`Hello There ${user.payload.username}`);
+        if (user.payload) toast.success(`Hello There ${user.payload.username}`);
       })
-      .addCase(registerUser.rejected, (state, { payload }) => {
+      .addCase(registerUser.rejected, (state, { payload }: any) => {
         state.isLoading = false;
         toast.error(payload);
       })
@@ -77,7 +92,7 @@ const userSlice = createSlice({
         state.user = user;
         toast.success(`Authenticate yourself!`);
       })
-      .addCase(loginUser.rejected, (state, { payload }) => {
+      .addCase(loginUser.rejected, (state, { payload }: any) => {
         state.isLoading = false;
         toast.error(payload);
       })
@@ -85,14 +100,14 @@ const userSlice = createSlice({
       .addCase(authUser.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(authUser.fulfilled, (state, { payload }) => {
-        //const user = { payload };
+      .addCase(authUser.fulfilled, (state, { payload }: any) => {
+        const user = { payload };
         state.isLoading = false;
         state.authenticated = true;
-        //state.user = user;
+        state.user = user;
         toast.success(`Solve The Catpcha!`);
       })
-      .addCase(authUser.rejected, (state, { payload }) => {
+      .addCase(authUser.rejected, (state, { payload }: any) => {
         state.isLoading = false;
         toast.error(payload);
       });

@@ -46,7 +46,7 @@ namespace MultiAuthenticationAppAPI.Controllers
         {
             bool result = _userService.Authenticate(dto);
             if (result) return Ok();
-            else return BadRequest();
+            else return BadRequest("Authentication data is incorrect!");
         }
 
     }

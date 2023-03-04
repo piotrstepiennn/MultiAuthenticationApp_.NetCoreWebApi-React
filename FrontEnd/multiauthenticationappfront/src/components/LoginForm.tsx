@@ -1,17 +1,19 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useSelector, useDispatch, useStore } from "react-redux";
+//import { useSelector, useDispatch, useStore } from "react-redux";
+import { useAppSelector, useAppDispatch } from "../hooks/hooks";
 import { SingleFormRow } from "./SingleFormRow";
-import { addUserToLocalStorage } from "../features/localStorage";
+//import { addUserToLocalStorage } from "../features/localStorage";
 import { loginUser } from "../features/userSlice";
 
-const LoginForm = ({ Title }) => {
+type Props = { Title: string };
+const LoginForm = ({ Title }: Props) => {
   useEffect(() => {
     document.title = Title;
   }, []);
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const initialState = {
@@ -22,7 +24,7 @@ const LoginForm = ({ Title }) => {
   };
 
   const [values, setValues] = useState(initialState);
-  const { user, isLoading } = useSelector((store) => store.user);
+  const { user, isLoading } = useAppSelector((store) => store.user);
   useEffect(() => {
     if (user) {
       navigate("/auth");
@@ -34,13 +36,14 @@ const LoginForm = ({ Title }) => {
   //     setErrorMessage("");
   //   }, [username, password]);
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.name;
     const value = e.target.value;
     setValues({ ...values, [name]: value });
     const isEmpty = Object.values(values).every((x) => x === null || x === "");
     if (!isEmpty) {
-      document.getElementById("sendmail").disabled = false;
+      (document.getElementById("sendmail") as HTMLButtonElement).disabled =
+        false;
     }
     if (values.isError === true) {
       setValues({
@@ -51,7 +54,7 @@ const LoginForm = ({ Title }) => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
     const { username, password } = values;
 

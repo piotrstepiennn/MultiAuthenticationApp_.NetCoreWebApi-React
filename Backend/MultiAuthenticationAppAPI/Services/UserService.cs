@@ -169,8 +169,6 @@ namespace MultiAuthenticationAppAPI.Services
 
             for (int i = 0; i < 4; i++)
             {
-                var test2 = user.AuthPassword[letterIndex[i] - 1];
-                var testUser = user.AuthPassword[letterIndex[i]];
                 if (user.AuthPassword[(letterIndex[i])-1] != dto.AuthPassword[i]) return false;
             }
 
