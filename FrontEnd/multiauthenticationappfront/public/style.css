@@ -8,197 +8,153 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  font-family: "Poppins", "Times New", sans-serif;
 }
 
 body {
+  transform: scale(0.8);
   align-items: center;
   background: linear-gradient(to top right, var(--color-bg-dark), var(--color-bg-light));
-  color: #fff;
   display: flex;
-  font-family: "Times New", sans-serif;
   font-size: 24px;
   height: 100vh;
   justify-content: center;
-  overflow: hidden;
   width: 100vw;
   flex-direction: column;
+}
+@media (max-width: 900px) {
+  body {
+    transform: scale(0.5);
+  }
 }
 
 h1 {
   text-align: center;
   clear: both;
+  color: #fff;
+  margin-bottom: 10px;
 }
 
-.form,
-.user-panel,
-.authenticationForm {
-  -webkit-backdrop-filter: blur(5px);
-          backdrop-filter: blur(5px);
-  background: linear-gradient(to left, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.35));
-  border-radius: 15px;
-  box-shadow: 0px 8px 24px 0px rgba(0, 0, 0, 0.3);
-  max-height: 100%;
-  max-width: 350px;
-  overflow-x: hidden;
-  overflow-y: hidden;
-  padding: 36px 24px;
+.container {
+  max-width: 700px;
+  width: 100%;
+  background: #fff;
+  padding: 25px 30px;
+  border-radius: 10px;
   position: relative;
+}
+.container form,
+.container .authenticationForm {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  position: inherit;
+}
+.container form .form__input-container,
+.container .authenticationForm .form__input-container {
+  width: calc(50% - 20px);
+  margin: 20px 0 12px 0;
+}
+.container form .form__input-container .form__input:not(:-moz-placeholder-shown) + .form__input-label, .container .authenticationForm .form__input-container .form__input:not(:-moz-placeholder-shown) + .form__input-label {
+  left: 100%;
+  opacity: 0;
+  top: -40px;
+}
+.container form .form__input-container .form__input:focus + .form__input-label,
+.container form .form__input-container .form__input:not(:placeholder-shown) + .form__input-label,
+.container .authenticationForm .form__input-container .form__input:focus + .form__input-label,
+.container .authenticationForm .form__input-container .form__input:not(:placeholder-shown) + .form__input-label {
+  left: 100%;
+  opacity: 0;
+  top: -40px;
+}
+.container form .form__input-container .form__input,
+.container .authenticationForm .form__input-container .form__input {
+  height: 45px;
+  width: 100%;
+  outline: none;
+  border-radius: 5px;
   text-align: center;
-  width: 100%;
+  font-size: large;
 }
-.form h4,
-.user-panel h4,
-.authenticationForm h4 {
-  margin-bottom: 20px;
-}
-.form a,
-.user-panel a,
-.authenticationForm a {
-  padding: 10px;
-  text-decoration: none;
-  color: white;
-  display: block;
-  margin-top: 20px;
-}
-.form .form__icon,
-.user-panel .form__icon,
-.authenticationForm .form__icon {
-  border: solid 3px rgba(255, 255, 255, 0.7);
-  border-radius: 50%;
-  box-shadow: 0px 8px 18px 0px rgba(0, 0, 0, 0.3);
-  height: 72px;
-  margin: 0 auto 24px;
-  overflow: hidden;
-  position: relative;
-  width: 72px;
-}
-.form .form__icon:before,
-.user-panel .form__icon:before,
-.authenticationForm .form__icon:before {
-  background: rgba(255, 255, 255, 0.7);
-  bottom: 0;
-  border-radius: 50%;
-  content: "";
-  display: block;
-  height: 24px;
-  left: 50%;
-  position: absolute;
-  transform: translateX(-50%);
-  width: 48px;
-}
-.form .form__icon:after,
-.user-panel .form__icon:after,
-.authenticationForm .form__icon:after {
-  background: rgba(255, 255, 255, 0.7);
-  bottom: 45%;
-  border-radius: 50%;
-  content: "";
-  display: block;
-  height: 24px;
-  left: 50%;
-  position: absolute;
-  transform: translateX(-50%);
-  width: 24px;
-}
-.form .form__input-container,
-.user-panel .form__input-container,
-.authenticationForm .form__input-container {
-  margin-bottom: 32px;
-  position: relative;
-}
-.form .form__input,
-.form .form__button,
-.user-panel .form__input,
-.user-panel .form__button,
-.authenticationForm .form__input,
-.authenticationForm .form__button {
-  background: linear-gradient(to right, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.25));
-  border: none;
-  border-radius: 18px;
-  box-shadow: 0px 8px 24px 0px rgba(0, 0, 0, 0.3);
-  color: #fff;
-  font-size: 24px;
-  outline: transparent;
-  overflow: hidden;
-  position: relative;
-}
-.form .form__input,
-.user-panel .form__input,
-.authenticationForm .form__input {
-  padding: 12px 24px;
-  width: 100%;
-}
-.form .form__input:not(:-moz-placeholder-shown) + .form__input-label, .user-panel .form__input:not(:-moz-placeholder-shown) + .form__input-label, .authenticationForm .form__input:not(:-moz-placeholder-shown) + .form__input-label {
-  left: 100%;
-  opacity: 0;
-}
-.form .form__input:focus + .form__input-label,
-.form .form__input:not(:placeholder-shown) + .form__input-label,
-.user-panel .form__input:focus + .form__input-label,
-.user-panel .form__input:not(:placeholder-shown) + .form__input-label,
-.authenticationForm .form__input:focus + .form__input-label,
-.authenticationForm .form__input:not(:placeholder-shown) + .form__input-label {
-  left: 100%;
-  opacity: 0;
-}
-.form .form__input-label,
-.user-panel .form__input-label,
-.authenticationForm .form__input-label {
+.container form .form__input-container .form__input-label,
+.container .authenticationForm .form__input-container .form__input-label {
   cursor: text;
   left: 24px;
   font-style: italic;
   opacity: 0.4;
-  position: absolute;
-  top: 50%;
+  position: relative;
+  top: -40px;
   transform: translateY(-50%);
   transition: left 0.2s ease-in, opacity 0.2s ease-in;
 }
-.form .form__spacer,
-.user-panel .form__spacer,
-.authenticationForm .form__spacer {
-  background: rgba(255, 255, 255, 0.5);
-  border-radius: 100%;
+.container form .auth,
+.container .authenticationForm .auth {
+  clear: both;
+  width: 100%;
+  display: flexbox;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+.container form .auth .form__input-container,
+.container .authenticationForm .auth .form__input-container {
+  left: 150px;
+  position: relative;
+  text-align: left;
+}
+.container .authenticationForm {
+  clear: both;
+  position: relative;
+  display: flex;
+  align-items: center;
+  text-align: left;
+  justify-content: center;
+  flex-direction: column;
+}
+.container .authenticationForm .form__input-container {
+  position: inherit;
+  align-items: center;
+  width: 400px;
+}
+.container .authenticationForm h4 {
+  max-width: 400px;
+  position: inherit;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+  font-weight: lighter;
+  font-size: 16;
+  text-align: left;
+}
+.container a {
+  clear: both;
+  display: flex;
+  padding: 10px;
+  justify-content: center;
+  align-items: center;
   display: block;
-  height: 2px;
-  margin: 32px auto;
-  width: 80%;
+  margin-top: 20px;
 }
-.form .form__button,
-.user-panel .form__button,
-.authenticationForm .form__button {
-  cursor: pointer;
-  padding: 12px 48px;
+.container .form__button {
+  clear: both;
+  width: 97%;
+  display: flexbox;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  height: 3vh;
+  border-radius: 5px;
+  font-weight: bold;
 }
-.form .alert_container,
-.user-panel .alert_container,
-.authenticationForm .alert_container {
+
+.alert_container {
   clear: both;
   display: block;
   margin-top: 40px;
 }
-.form .alert_container h4,
-.user-panel .alert_container h4,
-.authenticationForm .alert_container h4 {
+.alert_container h4 {
   text-align: center;
-}
-
-.h h1 {
-  text-align: center;
-}
-
-.user-panel {
-  clear: both;
-  min-height: 600px;
-  min-width: 500px;
-  display: block;
-}
-.user-panel form {
-  margin-top: 20px;
-  justify-content: center;
-  align-items: center;
-  display: none;
-}
-.user-panel .form__button {
-  clear: both;
-  margin-top: 30px;
+  font-size: small;
+  font-weight: 400;
 }/*# sourceMappingURL=style.css.map */

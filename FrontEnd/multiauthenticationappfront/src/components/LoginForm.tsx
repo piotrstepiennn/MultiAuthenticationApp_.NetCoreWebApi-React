@@ -71,52 +71,54 @@ const LoginForm = ({ Title }: Props) => {
   return (
     <div>
       <h1>Login</h1>
-      <form
-        className="form"
-        id="loginForm"
-        autoComplete="off"
-        onSubmit={handleSubmit}
-        method="POST"
-      >
-        <SingleFormRow
-          type="text"
-          name="username"
-          value={values.username}
-          handleChange={handleChange}
-          labelText="Username"
-        />
-
-        <SingleFormRow
-          type="password"
-          name="password"
-          value={values.password}
-          handleChange={handleChange}
-          labelText="Password"
-        />
-        <div className="form__spacer" aria-hidden="true"></div>
-
-        <button
-          id="sendmail"
-          type="submit"
-          className="form__button"
-          disabled={true}
+      <div className="container">
+        <form
+          className="form"
+          id="loginForm"
+          autoComplete="off"
+          onSubmit={handleSubmit}
+          method="POST"
         >
-          Login
-        </button>
+          <SingleFormRow
+            type="text"
+            name="username"
+            value={values.username}
+            handleChange={handleChange}
+            labelText="Username"
+          />
 
+          <SingleFormRow
+            type="password"
+            name="password"
+            value={values.password}
+            handleChange={handleChange}
+            labelText="Password"
+          />
+          <div className="form__spacer" aria-hidden="true"></div>
+
+          <button
+            id="sendmail"
+            type="submit"
+            className="form__button"
+            disabled={true}
+          >
+            Login
+          </button>
+
+          {values.isError && (
+            <div className="alert_container">
+              <h4 className="alert_message"> {values.errorMsg}</h4>
+            </div>
+          )}
+          {/* <br>           */}
+          <div
+            className="g-recaptcha"
+            data-sitekey="6LcTf04eAAAAADvBL0c1AZdKzrMUH1-RvNgcgfFC"
+          ></div>
+          {/* <br> */}
+        </form>
         <a href="register">Need an account? Sign Up!</a>
-        {values.isError && (
-          <div className="alert_container">
-            <h4 className="alert_message"> {values.errorMsg}</h4>
-          </div>
-        )}
-        {/* <br>           */}
-        <div
-          className="g-recaptcha"
-          data-sitekey="6LcTf04eAAAAADvBL0c1AZdKzrMUH1-RvNgcgfFC"
-        ></div>
-        {/* <br> */}
-      </form>
+      </div>
       <script
         src="https://www.google.com/recaptcha/api.js"
         async

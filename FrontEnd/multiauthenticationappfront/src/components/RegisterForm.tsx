@@ -29,6 +29,7 @@ const RegisterForm = ({ Title }: Props) => {
     email: "",
     question: "car",
     answer: "",
+    phoneNumber: "",
     isError: false,
     errorMsg: "Unexpected Error, try again.",
   };
@@ -67,6 +68,7 @@ const RegisterForm = ({ Title }: Props) => {
       email,
       question,
       answer,
+      phoneNumber,
     } = values;
     e.preventDefault();
 
@@ -97,6 +99,7 @@ const RegisterForm = ({ Title }: Props) => {
         email: email,
         question: question,
         answer: answer,
+        phoneNumber: phoneNumber,
       })
     );
     // console.log(registerError);
@@ -146,104 +149,113 @@ const RegisterForm = ({ Title }: Props) => {
   return (
     <div>
       <h1>Sign Up!</h1>
-
-      <form
-        name="registerForm"
-        className="form"
-        autoComplete="off"
-        method="POST"
-        onSubmit={handleRegister}
-      >
-        <SingleFormRow
-          type="text"
-          name="username"
-          value={values.username}
-          handleChange={handleChange}
-          labelText="Username"
-        />
-
-        <SingleFormRow
-          type="password"
-          name="password"
-          value={values.password}
-          handleChange={handleChange}
-          labelText="Password"
-        />
-
-        <SingleFormRow
-          type="password"
-          name="confirmPassword"
-          value={values.confirmPassword}
-          handleChange={handleChange}
-          labelText="Confirm Password"
-        />
-
-        <SingleFormRow
-          type="password"
-          name="mobilePassword"
-          value={values.mobilePassword}
-          handleChange={handleChange}
-          labelText="Mobile App Password"
-        />
-
-        <SingleFormRow
-          type="password"
-          name="authPassword"
-          value={values.authPassword}
-          handleChange={handleChange}
-          labelText="Additional Auth Password"
-        />
-
-        <SingleFormRow
-          type="email"
-          name="email"
-          value={values.email}
-          handleChange={handleChange}
-          labelText="E-mail"
-        />
-
-        <div className="form__input-container">
-          <p>Authentication question</p>
-          <select
-            name="question"
-            id=""
-            onChange={handleChange}
-            value={values.question}
-          >
-            {data.questions.map((question) => (
-              <option value={question.questionType} key={question.questionType}>
-                {question.longQuestion}
-              </option>
-            ))}
-            {/* <option value="car">Favourite car brand</option>
-            <option value="game">Favourite computer game</option> */}
-          </select>
-        </div>
-
-        <SingleFormRow
-          type="text"
-          name="answer"
-          value={values.answer}
-          handleChange={handleChange}
-          labelText="Answer"
-        />
-
-        <div className="form__spacer" aria-hidden="true"></div>
-        <button
-          type="submit"
-          className="form__button"
-          id="registerButton"
-          disabled={true}
+      <div className="container">
+        <form
+          name="registerForm"
+          autoComplete="off"
+          method="POST"
+          onSubmit={handleRegister}
         >
-          Create Account
-        </button>
+          <SingleFormRow
+            type="text"
+            name="username"
+            value={values.username}
+            handleChange={handleChange}
+            labelText="Username"
+          />
 
-        {values.isError && (
-          <div className="alert_container">
-            <h4 className="alert_message"> {values.errorMsg}</h4>
+          <SingleFormRow
+            type="password"
+            name="password"
+            value={values.password}
+            handleChange={handleChange}
+            labelText="Password"
+          />
+
+          <SingleFormRow
+            type="password"
+            name="confirmPassword"
+            value={values.confirmPassword}
+            handleChange={handleChange}
+            labelText="Confirm Password"
+          />
+
+          <SingleFormRow
+            type="password"
+            name="mobilePassword"
+            value={values.mobilePassword}
+            handleChange={handleChange}
+            labelText="Mobile App Password"
+          />
+
+          <SingleFormRow
+            type="password"
+            name="authPassword"
+            value={values.authPassword}
+            handleChange={handleChange}
+            labelText="Auth Password"
+          />
+
+          <SingleFormRow
+            type="email"
+            name="email"
+            value={values.email}
+            handleChange={handleChange}
+            labelText="E-mail"
+          />
+
+          <div className="auth">
+            <SingleFormRow
+              type="text"
+              name="phoneNumber"
+              value={values.phoneNumber}
+              handleChange={handleChange}
+              labelText="Phone Number"
+            />
+            <p>Authentication question</p>
+            <select
+              name="question"
+              id=""
+              onChange={handleChange}
+              value={values.question}
+            >
+              {data.questions.map((question) => (
+                <option
+                  value={question.questionType}
+                  key={question.questionType}
+                >
+                  {question.longQuestion}
+                </option>
+              ))}
+              {/* <option value="car">Favourite car brand</option>
+              <option value="game">Favourite computer game</option> */}
+            </select>
+
+            <SingleFormRow
+              type="text"
+              name="answer"
+              value={values.answer}
+              handleChange={handleChange}
+              labelText="Answer"
+            />
           </div>
-        )}
-      </form>
+
+          <div className="form__spacer" aria-hidden="true"></div>
+          <button
+            type="submit"
+            className="form__button"
+            id="registerButton"
+            disabled={true}
+          >
+            Create Account
+          </button>
+          {values.isError && (
+            <div className="alert_container">
+              <h4 className="alert_message"> {values.errorMsg}</h4>
+            </div>
+          )}
+        </form>
+      </div>
     </div>
   );
 };
