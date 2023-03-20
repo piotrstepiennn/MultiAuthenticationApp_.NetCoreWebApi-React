@@ -1,236 +1,288 @@
 import React from "react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useAppSelector, useAppDispatch } from "../hooks/hooks";
+import { registerUser } from "../features/userSlice";
+import { SingleFormRow } from "./SingleFormRow";
+import { compareElements } from "../features/tools";
 
 type Props = { Title: string };
 const UserPanel = ({ Title }: Props) => {
   useEffect(() => {
     document.title = Title;
   });
+
+  const initialState = {
+    changeUsernameForm: false,
+    changeEmailForm: false,
+    changePasswordForm: false,
+    currentUsername: "",
+    newUsername: "",
+    confirmNewUsername: "",
+    currentPassword: "",
+    newPassword: "",
+    confirmNewPassword: "",
+    currentEmail: "",
+    newEmail: "",
+    confirmNewEmail: "",
+    isError: false,
+    errorMsg: "",
+  };
+
+  const [values, setValues] = useState(initialState);
+  const dispatch = useAppDispatch();
+  const { user } = useAppSelector((store) => store.user);
+  console.log(user);
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const name = e.target.name;
+    const value = e.target.value;
+    setValues({ ...values, [name]: value });
+
+    const isEmpty = Object.values(values).some((x) => x === null || x === "");
+    if (!isEmpty) {
+      (
+        document.getElementById("registerButton") as HTMLButtonElement
+      ).disabled = false;
+    }
+    if (values.isError === true) {
+      setValues({
+        ...values,
+        errorMsg: "",
+        isError: false,
+      });
+    }
+  };
+
+  const handleLogout = () => {};
+
+  const handleChangeUsername = async (
+    e: React.ChangeEvent<HTMLFormElement>
+  ) => {
+    e.preventDefault();
+    const check = compareElements(
+      values.newUsername,
+      values.confirmNewUsername,
+      "Username"
+    );
+    if (check.isError) {
+      setValues({
+        ...values,
+        errorMsg: check.errorMsg,
+        isError: check.isError,
+      });
+      return;
+    }
+    console.log(check);
+  };
+  const handleChangePassword = async (
+    e: React.ChangeEvent<HTMLFormElement>
+  ) => {
+    e.preventDefault();
+    const check = compareElements(
+      values.newPassword,
+      values.confirmNewPassword,
+      "Password"
+    );
+    if (check.isError) {
+      setValues({
+        ...values,
+        errorMsg: check.errorMsg,
+        isError: check.isError,
+      });
+      return;
+    }
+  };
+  const handleChangeEmail = async (e: React.ChangeEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const check = compareElements(
+      values.newEmail,
+      values.confirmNewEmail,
+      "Email"
+    );
+    if (check.isError) {
+      setValues({
+        ...values,
+        errorMsg: check.errorMsg,
+        isError: check.isError,
+      });
+      return;
+    }
+  };
   return (
     <div>
       <div className="h">
-        <h1>Panel Użytkownika</h1>
+        <h1>User Panel</h1>
+        <h4>Hello</h4>
       </div>
 
-      <div className="user-panel">
-        <h4>Witaj</h4>
+      <div className="container">
         {/* <p> {{userName}} </p>
         <p> {{email}}</p> */}
-
-        <input
-          type="button"
-          className="form__button"
-          value="Zmień Nazwę użytkownika"
-          id="buttonChangeUsername"
-        />
-
-        <center>
-          <form
-            id="form"
-            className="form"
-            autoComplete="off"
-            action="/auth/userPanel/changeUsername"
-            method="POST"
-          >
-            <div className="form__input-container">
-              <input
-                aria-label="old_username"
-                className="form__input"
+        <div className="user-panel">
+          <input
+            type="button"
+            className="form__button"
+            value="Change Username"
+            id="buttonChangeUsername"
+            onClick={(e) =>
+              setValues({
+                ...values,
+                changeUsernameForm: !values.changeUsernameForm,
+                changeEmailForm: false,
+                changePasswordForm: false,
+              })
+            }
+          />
+          {values.changeUsernameForm && (
+            <form
+              id="form"
+              className="form"
+              autoComplete="off"
+              onSubmit={handleChangeUsername}
+              method="POST"
+            >
+              <SingleFormRow
                 type="text"
-                id="old_user"
-                placeholder=" "
-                name="old_username"
-                required
+                name="currentUsername"
+                value={values.currentUsername}
+                handleChange={handleChange}
+                labelText="Current Username"
               />
-              <label className="form__input-label" htmlFor="old_username">
-                Obecna Nazwa
-              </label>
-            </div>
-
-            <div className="form__input-container">
-              <input
-                aria-label="new_username"
-                className="form__input"
+              <SingleFormRow
                 type="text"
-                id="new_user"
-                placeholder=" "
-                name="new_username"
-                required
+                name="newUsername"
+                value={values.newUsername}
+                handleChange={handleChange}
+                labelText="New Username"
               />
-              <label className="form__input-label" htmlFor="new_username">
-                Nowa Nazwa
-              </label>
-            </div>
-
-            <div className="form__input-container">
-              <input
-                aria-label="text"
-                className="form__input"
+              <SingleFormRow
                 type="text"
-                id="new_username_confirm"
-                placeholder=" "
-                name="new_username_confirm"
-                required
+                name="confirmNewUsername"
+                value={values.confirmNewUsername}
+                handleChange={handleChange}
+                labelText="Confirm New Username"
               />
-              <label
-                className="form__input-label"
-                htmlFor="new_username_confirm"
-              >
-                Powtórz Nową Nazwę
-              </label>
-            </div>
-            <div className="form__spacer" aria-hidden="true"></div>
-            <button type="submit" className="form__button" id="buttonSubmit1">
-              Potwierdź
-            </button>
-          </form>
-        </center>
-
-        <input
-          type="button"
-          className="form__button"
-          value="Zmień Hasło"
-          id="buttonChangePassword"
-        />
-        <center>
-          <form
-            id="form2"
-            className="form"
-            autoComplete="off"
-            action="/auth/userPanel/changePassword"
-            method="POST"
-          >
-            <div className="form__input-container">
-              <input
-                aria-label="old_password"
-                className="form__input"
-                type="password"
-                id="old_password"
-                placeholder=" "
-                name="old_password"
-                required
+              <div className="form__spacer" aria-hidden="true"></div>
+              <button type="submit" className="form__button" id="buttonSubmit1">
+                Confirm
+              </button>
+            </form>
+          )}
+          <input
+            type="button"
+            className="form__button"
+            value="Change Password"
+            id="buttonChangePassword"
+            onClick={(e) =>
+              setValues({
+                ...values,
+                changeUsernameForm: false,
+                changeEmailForm: false,
+                changePasswordForm: !values.changePasswordForm,
+              })
+            }
+          />
+          {values.changePasswordForm && (
+            <form
+              id="form2"
+              className="form"
+              autoComplete="off"
+              onSubmit={handleChangePassword}
+              method="POST"
+            >
+              <SingleFormRow
+                type="text"
+                name="currentPassword"
+                value={values.currentPassword}
+                handleChange={handleChange}
+                labelText="Current Password"
               />
-              <label className="form__input-label" htmlFor="old_password">
-                Obecne Hasło
-              </label>
-            </div>
-
-            <div className="form__input-container">
-              <input
-                aria-label="new_password"
-                className="form__input"
-                type="password"
-                id="new_password"
-                placeholder=" "
-                name="new_password"
-                required
+              <SingleFormRow
+                type="text"
+                name="newPassword"
+                value={values.newPassword}
+                handleChange={handleChange}
+                labelText="New Password"
               />
-              <label className="form__input-label" htmlFor="new_password">
-                Nowe Hasło
-              </label>
-            </div>
-
-            <div className="form__input-container">
-              <input
-                aria-label="Password"
-                className="form__input"
-                type="password"
-                id="password"
-                placeholder=" "
-                name="new_password_confirm"
-                required
+              <SingleFormRow
+                type="text"
+                name="confirmNewPassword"
+                value={values.confirmNewPassword}
+                handleChange={handleChange}
+                labelText="Confirm New Password"
               />
-              <label className="form__input-label" htmlFor="password">
-                Powtórz Nowe Hasło
-              </label>
-            </div>
-            <div className="form__spacer" aria-hidden="true"></div>
-            <button type="submit" className="form__button" id="buttonSubmit2">
-              Potwierdź
-            </button>
-          </form>
-        </center>
+              <div className="form__spacer" aria-hidden="true"></div>
+              <button type="submit" className="form__button" id="buttonSubmit2">
+                Confirm
+              </button>
+            </form>
+          )}
 
-        <input
-          type="button"
-          className="form__button"
-          value="Zmień Email"
-          id="buttonChangeEmail"
-        />
-        <center>
-          <form
-            id="form3"
-            className="form"
-            autoComplete="off"
-            action="/auth/userPanel/changeEmail"
-            method="POST"
-          >
-            <div className="form__input-container">
-              <input
-                aria-label="old_email"
-                className="form__input"
+          <input
+            type="button"
+            className="form__button"
+            value="Change Email"
+            id="buttonChangeEmail"
+            onClick={(e) =>
+              setValues({
+                ...values,
+                changeUsernameForm: false,
+                changeEmailForm: !values.changeEmailForm,
+                changePasswordForm: false,
+              })
+            }
+          />
+          {values.changeEmailForm && (
+            <form
+              id="form3"
+              className="form"
+              autoComplete="off"
+              onSubmit={handleChangeEmail}
+              method="POST"
+            >
+              <SingleFormRow
                 type="email"
-                id="old_email"
-                placeholder=" "
-                name="old_email"
-                required
+                name="currentEmail"
+                value={values.currentEmail}
+                handleChange={handleChange}
+                labelText="Current Email"
               />
-              <label className="form__input-label" htmlFor="old_email">
-                Obecny Email
-              </label>
-            </div>
-
-            <div className="form__input-container">
-              <input
-                aria-label="new_email"
-                className="form__input"
+              <SingleFormRow
                 type="email"
-                id="user"
-                placeholder=" "
-                name="new_email"
-                required
+                name="newEmail"
+                value={values.newEmail}
+                handleChange={handleChange}
+                labelText="New Email"
               />
-              <label className="form__input-label" htmlFor="new_email">
-                Nowy Email
-              </label>
-            </div>
-
-            <div className="form__input-container">
-              <input
-                aria-label="new_email_confirm"
-                className="form__input"
+              <SingleFormRow
                 type="email"
-                id="new_email_confirm"
-                placeholder=" "
-                name="new_email_confirm"
-                required
+                name="confirmNewEmail"
+                value={values.confirmNewEmail}
+                handleChange={handleChange}
+                labelText="Confirm New Email"
               />
-              <label className="form__input-label" htmlFor="new_email_confirm">
-                Powtórz Nowy Email
-              </label>
+              <div className="form__spacer" aria-hidden="true"></div>
+              <button type="submit" className="form__button" id="buttonSubmit3">
+                Confirm
+              </button>
+            </form>
+          )}
+          {values.isError && (
+            <div className="alert_container">
+              <h4 className="alert_message"> {values.errorMsg}</h4>
             </div>
-            <div className="form__spacer" aria-hidden="true"></div>
-            <button type="submit" className="form__button" id="buttonSubmit3">
-              Potwierdź
-            </button>
-          </form>
-        </center>
-
-        <div className="alert_container">
-          {/* {{#if message }}
-        
-                    <h4 className="alert_message"> {{message}} </h4>
-        
-                {{/if}} */}
+          )}
+          <div className="form__spacer" aria-hidden="true"></div>
+          <input
+            type="button"
+            className="form__button"
+            value="Logout"
+            onClick={handleLogout}
+          />
         </div>
-
-        <div className="form__spacer" aria-hidden="true"></div>
-        <a className="form__button" href="/logout">
-          Wyloguj
-        </a>
       </div>
-
-      <script src="/open_form_on_button_click.js"></script>
     </div>
   );
 };

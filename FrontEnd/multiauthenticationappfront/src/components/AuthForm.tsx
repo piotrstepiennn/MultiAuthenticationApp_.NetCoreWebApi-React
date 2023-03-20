@@ -38,8 +38,8 @@ const AuthForm = ({ Title }: Props) => {
   useEffect(() => {
     console.log(authenticated);
     if (authenticated === true) {
-      console.log("navigate to custom captcha!");
-      //navigate("/auth");
+      console.log("navigate to userPanel!");
+      //navigate("/userPanel");
     }
   }, [authenticated, navigate]);
 

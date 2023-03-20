@@ -48,7 +48,8 @@ h1 {
   position: relative;
 
   form,
-  .authenticationForm {
+  .authenticationForm,
+  .user-panel {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
@@ -155,5 +156,57 @@ h1 {
     text-align: center;
     font-size: small;
     font-weight: 400;
+  }
+}
+
+.user-panel {
+  .form__button {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+  .form {
+    position: relative;
+    display: block;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    .form__input-container {
+      justify-content: center;
+      width: 97%;
+      align-items: center;
+      .form__input-label {
+        left: 10px;
+      }
+      .form__button {
+        width: 100%;
+      }
+      .form__input {
+        height: 45px;
+        width: 100%;
+        outline: none;
+        border-radius: 5px;
+        text-align: center;
+        font-size: large;
+      }
+    }
+  }
+  .alert_container {
+    clear: both;
+    display: block;
+    margin-top: 40px;
+    width: 100%;
+    text-align: center;
+    h4 {
+      font-size: 26px;
+      color: red;
+    }
+  }
+}
+.h {
+  h1 {
+    text-align: center;
+  }
+  h4 {
+    text-align: center;
   }
 }

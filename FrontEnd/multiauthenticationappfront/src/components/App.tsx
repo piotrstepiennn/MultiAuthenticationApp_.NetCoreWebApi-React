@@ -27,9 +27,9 @@ function App() {
         <Route
           path="/userPanel"
           element={
-            <ProtectedRoute>
-              <UserPanel Title="User Panel" />
-            </ProtectedRoute>
+            //<ProtectedRoute>
+            <UserPanel Title="User Panel" />
+            //</ProtectedRoute>
           }
         />
       </Routes>

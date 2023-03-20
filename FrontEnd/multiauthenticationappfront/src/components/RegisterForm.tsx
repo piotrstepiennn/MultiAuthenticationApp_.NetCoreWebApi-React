@@ -5,6 +5,7 @@ import { SingleFormRow } from "./SingleFormRow";
 //import { useSelector, useDispatch, useStore } from "react-redux";
 import { useAppSelector, useAppDispatch } from "../hooks/hooks";
 import { registerUser } from "../features/userSlice";
+import { compareElements } from "../features/tools";
 import data from "./questions.json";
 
 type Props = { Title: string };
@@ -43,7 +44,7 @@ const RegisterForm = ({ Title }: Props) => {
     const value = e.target.value;
     setValues({ ...values, [name]: value });
 
-    const isEmpty = Object.values(values).every((x) => x === null || x === "");
+    const isEmpty = Object.values(values).some((x) => x === null || x === "");
     if (!isEmpty) {
       (
         document.getElementById("registerButton") as HTMLButtonElement
@@ -81,11 +82,16 @@ const RegisterForm = ({ Title }: Props) => {
     //   answer: answer,
     // };
 
-    if (password !== confirmPassword) {
+    const check = compareElements(
+      values.password,
+      values.confirmPassword,
+      "Password"
+    );
+    if (check.isError) {
       setValues({
         ...values,
-        errorMsg: "Password confirmation does not match.",
-        isError: true,
+        errorMsg: check.errorMsg,
+        isError: check.isError,
       });
       return;
     }
@@ -102,46 +108,6 @@ const RegisterForm = ({ Title }: Props) => {
         phoneNumber: phoneNumber,
       })
     );
-    // console.log(registerError);
-    // if (registerError === false) {
-    //   navigate("/");
-    //}
-
-    // try {
-    //   if (password !== confirmPassword) {
-    //     setValues({
-    //       ...values,
-    //       errorMsg: "Password confirmation does not match.",
-    //       isError: true,
-    //     });
-    //     return;
-    //   }
-    //   const resp = await axios.post("/register", user);
-    //   setValues({
-    //     ...values,
-    //     errorMsg:
-    //       "Account Created! You're going to be redirected to login page in 5 sec.",
-    //     isError: true,
-    //   });
-    //   setTimeout(() => {
-    //     navigate("/");
-    //   }, 5000);
-    // } catch (error) {
-    //   console.log(error);
-    //   if (error.code === "ERR_NETWORK") {
-    //     setValues({
-    //       ...values,
-    //       errorMsg: "Unexpected Error occured, try again.",
-    //       isError: true,
-    //     });
-    //   } else {
-    //     setValues({
-    //       ...values,
-    //       errorMsg: error.response.data.title,
-    //       isError: true,
-    //     });
-    //   }
-    //}
 
     return;
   };
@@ -163,7 +129,6 @@ const RegisterForm = ({ Title }: Props) => {
             handleChange={handleChange}
             labelText="Username"
           />
-
           <SingleFormRow
             type="password"
             name="password"
@@ -171,7 +136,6 @@ const RegisterForm = ({ Title }: Props) => {
             handleChange={handleChange}
             labelText="Password"
           />
-
           <SingleFormRow
             type="password"
             name="confirmPassword"
@@ -179,7 +143,6 @@ const RegisterForm = ({ Title }: Props) => {
             handleChange={handleChange}
             labelText="Confirm Password"
           />
-
           <SingleFormRow
             type="password"
             name="mobilePassword"
@@ -187,7 +150,6 @@ const RegisterForm = ({ Title }: Props) => {
             handleChange={handleChange}
             labelText="Mobile App Password"
           />
-
           <SingleFormRow
             type="password"
             name="authPassword"
@@ -195,7 +157,6 @@ const RegisterForm = ({ Title }: Props) => {
             handleChange={handleChange}
             labelText="Auth Password"
           />
-
           <SingleFormRow
             type="email"
             name="email"
@@ -203,7 +164,6 @@ const RegisterForm = ({ Title }: Props) => {
             handleChange={handleChange}
             labelText="E-mail"
           />
-
           <div className="auth">
             <SingleFormRow
               type="text"
@@ -227,10 +187,7 @@ const RegisterForm = ({ Title }: Props) => {
                   {question.longQuestion}
                 </option>
               ))}
-              {/* <option value="car">Favourite car brand</option>
-              <option value="game">Favourite computer game</option> */}
             </select>
-
             <SingleFormRow
               type="text"
               name="answer"

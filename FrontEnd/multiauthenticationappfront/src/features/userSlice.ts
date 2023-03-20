@@ -105,7 +105,7 @@ const userSlice = createSlice({
         state.isLoading = false;
         state.authenticated = true;
         state.user = user;
-        toast.success(`Solve The Catpcha!`);
+        toast.success(`Success!`);
       })
       .addCase(authUser.rejected, (state, { payload }: any) => {
         state.isLoading = false;
