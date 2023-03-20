@@ -23,6 +23,9 @@ namespace MultiAuthenticationAppAPI.Services
         void GenerateAuthCodes(LoginDto dto);
         string MobileLogin(MobileLoginDto dto);
         bool Authenticate(AuthDto dto);
+        bool ChangeUsername(ChangeUsernameDto dto);
+        bool ChangePassword(ChangePasswordDto dto);
+        bool ChangeEmail(ChangeEmailDto dto);
     }
 
     public class UserService : IUserService
@@ -116,7 +119,7 @@ namespace MultiAuthenticationAppAPI.Services
                 throw new BadRequestException("Invalid Username or password");
             }
 
-            var authQuestion = user.Question + "*" + user.UserName;
+            var authQuestion = user.Question + "*" + user.UserName + "*" + user.Email;
             return authQuestion;
         }
 
@@ -192,6 +195,65 @@ namespace MultiAuthenticationAppAPI.Services
             return number;
         }
 
-        
+        public bool ChangeUsername(ChangeUsernameDto dto)
+        {
+            var user = _dbContext.Users.FirstOrDefault(u => u.UserName == dto.UserName);
+            if (user is null)
+            {
+                throw new BadRequestException("Invalid username!");
+            }
+            var check = _dbContext.Users.FirstOrDefault(u => u.UserName == dto.NewUserName);
+            if ( check is not null) { return false; }
+
+            if (user.Email != dto.Email) throw new BadRequestException("Invalid username!");
+
+            user.UserName = dto.NewUserName;
+            _dbContext.Users.Update(user);
+            _dbContext.SaveChanges();
+            return true;
+        }
+
+        public bool ChangeEmail(ChangeEmailDto dto)
+        {
+            var user = _dbContext.Users.FirstOrDefault(u => u.Email == dto.Email);
+            if (user is null)
+            {
+                throw new BadRequestException("Invalid current Email!");
+            }
+            var check = _dbContext.Users.FirstOrDefault(u => u.Email == dto.NewEmail);
+            if (check is not null) { return false; }
+
+            if (user.UserName != dto.Username)
+            {
+                throw new BadRequestException("Invalid current Email!");
+            }
+
+            user.Email = dto.NewEmail;
+            _dbContext.Users.Update(user);
+            _dbContext.SaveChanges();
+            return true;
+        }
+
+        public bool ChangePassword(ChangePasswordDto dto)
+        {
+            var user = _dbContext.Users.FirstOrDefault(u => u.UserName == dto.Username);
+            if (user is null)
+            {
+                throw new BadRequestException("Something went wrong!");
+            }
+
+            var passwordResult = _passwordHasher.VerifyHashedPassword(user, user.Password, dto.Password);
+            if (passwordResult == PasswordVerificationResult.Failed)
+            {
+                throw new BadRequestException("Invalid current password!");
+            }
+
+            user.Password = dto.NewPassword;
+            var hashedPassword = _passwordHasher.HashPassword(user, user.Password);
+            user.Password = hashedPassword;
+            _dbContext.Users.Update(user);
+            _dbContext.SaveChanges();
+            return true;
+        }
     }
 }

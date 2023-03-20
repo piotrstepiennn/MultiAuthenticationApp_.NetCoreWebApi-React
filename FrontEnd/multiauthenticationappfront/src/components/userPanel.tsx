@@ -1,7 +1,11 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import { useAppSelector, useAppDispatch } from "../hooks/hooks";
-import { registerUser } from "../features/userSlice";
+import {
+  changeUserUsername,
+  changeUserEmail,
+  changeUserPassword,
+} from "../features/userSlice";
 import { SingleFormRow } from "./SingleFormRow";
 import { compareElements } from "../features/tools";
 import { useNavigate } from "react-router-dom";
@@ -59,7 +63,6 @@ const UserPanel = ({ Title }: Props) => {
 
   const handleLogout = () => {
     dispatch(logoutUser());
-
     navigate("/");
   };
 
@@ -80,7 +83,14 @@ const UserPanel = ({ Title }: Props) => {
       });
       return;
     }
-    console.log(check);
+    dispatch(
+      changeUserUsername({
+        username: values.currentUsername,
+        newUsername: values.newUsername,
+        email: user.payload.email,
+      })
+    );
+    return;
   };
   const handleChangePassword = async (
     e: React.ChangeEvent<HTMLFormElement>
@@ -99,6 +109,14 @@ const UserPanel = ({ Title }: Props) => {
       });
       return;
     }
+    dispatch(
+      changeUserPassword({
+        username: user.payload.userName,
+        password: values.currentPassword,
+        newPassword: values.newPassword,
+      })
+    );
+    return;
   };
   const handleChangeEmail = async (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -115,6 +133,14 @@ const UserPanel = ({ Title }: Props) => {
       });
       return;
     }
+    dispatch(
+      changeUserEmail({
+        email: values.currentEmail,
+        newEmail: values.newEmail,
+        username: user.payload.userName,
+      })
+    );
+    return;
   };
   return (
     <div>

@@ -64,6 +64,54 @@ export const authUser = createAsyncThunk(
   }
 );
 
+export const changeUserUsername = createAsyncThunk(
+  "user/changeUsername",
+  async (user: object | null, thunkAPI: any) => {
+    try {
+      const resp = await axios.post("/user/changeUsername", user);
+      return resp.data;
+    } catch (error) {
+      if (typeof error.response.data === "object") {
+        let err: any;
+        err = Object.values(error.response.data.errors)[0];
+        return thunkAPI.rejectWithValue(err.toString());
+      } else return thunkAPI.rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const changeUserPassword = createAsyncThunk(
+  "user/changePassword",
+  async (user: object | null, thunkAPI: any) => {
+    try {
+      const resp = await axios.post("/user/changePassword", user);
+      return resp.data;
+    } catch (error) {
+      if (typeof error.response.data === "object") {
+        let err: any;
+        err = Object.values(error.response.data.errors)[0];
+        return thunkAPI.rejectWithValue(err.toString());
+      } else return thunkAPI.rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const changeUserEmail = createAsyncThunk(
+  "user/changeEmail",
+  async (user: object | null, thunkAPI: any) => {
+    try {
+      const resp = await axios.post("/user/changeEmail", user);
+      return resp.data;
+    } catch (error) {
+      if (typeof error.response.data === "object") {
+        let err: any;
+        err = Object.values(error.response.data.errors)[0];
+        return thunkAPI.rejectWithValue(err.toString());
+      } else return thunkAPI.rejectWithValue(error.response.data);
+    }
+  }
+);
+
 const userSlice = createSlice({
   name: "user",
   initialState,
@@ -111,6 +159,42 @@ const userSlice = createSlice({
         toast.success(`Success!`);
       })
       .addCase(authUser.rejected, (state, { payload }: any) => {
+        state.isLoading = false;
+        toast.error(payload);
+      })
+      //changeUserUsername
+      .addCase(changeUserUsername.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(changeUserUsername.fulfilled, (state, { payload }: any) => {
+        state.isLoading = false;
+        toast.success(`Username changed!`);
+      })
+      .addCase(changeUserUsername.rejected, (state, { payload }: any) => {
+        state.isLoading = false;
+        toast.error(payload);
+      })
+      //changeUserPassword
+      .addCase(changeUserPassword.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(changeUserPassword.fulfilled, (state, { payload }: any) => {
+        state.isLoading = false;
+        toast.success(`Password changed!`);
+      })
+      .addCase(changeUserPassword.rejected, (state, { payload }: any) => {
+        state.isLoading = false;
+        toast.error(payload);
+      })
+      //changeUserEmail
+      .addCase(changeUserEmail.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(changeUserEmail.fulfilled, (state, { payload }: any) => {
+        state.isLoading = false;
+        toast.success(`Email changed!`);
+      })
+      .addCase(changeUserEmail.rejected, (state, { payload }: any) => {
         state.isLoading = false;
         toast.error(payload);
       });

@@ -29,7 +29,7 @@ namespace MultiAuthenticationAppAPI.Controllers
             string token = _userService.GenerateJwt(dto);
             string authQuestion = _userService.GetAuthQuestion(dto);
             var result = authQuestion.Split('*');
-            return Ok(new { token, authQuestion = result[0], UserName = result[1] });
+            return Ok(new { token, authQuestion = result[0], UserName = result[1], Email = result[2] });
         }
 
         [HttpPost("/mobileAuth")]
@@ -47,6 +47,30 @@ namespace MultiAuthenticationAppAPI.Controllers
             bool result = _userService.Authenticate(dto);
             if (result) return Ok();
             else return BadRequest("Authentication data is incorrect!");
+        }
+
+        [HttpPost("/user/changeUsername")]
+        public ActionResult ChangeUserName([FromBody] ChangeUsernameDto dto)
+        {
+            bool result = _userService.ChangeUsername(dto);
+            if (result) return Ok();
+            else return BadRequest("New Username already taken!");
+        }
+
+        [HttpPost("/user/changeEmail")]
+        public ActionResult ChangeEmail([FromBody] ChangeEmailDto dto)
+        {
+            bool result = _userService.ChangeEmail(dto);
+            if (result) return Ok();
+            else return BadRequest("New Email already taken!");
+        }
+
+        [HttpPost("/user/changePassword")]
+        public ActionResult ChangePassword([FromBody] ChangePasswordDto dto)
+        {
+            bool result = _userService.ChangePassword(dto);
+            if (result) return Ok();
+            else return BadRequest("Something Went Wrong!");
         }
 
     }
