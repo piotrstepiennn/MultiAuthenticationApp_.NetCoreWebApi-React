@@ -21,6 +21,7 @@ namespace MultiAuthenticationAppAPI.Entities
         public string AuthPassword { get; set; }
         [Required]
         public string MobilePassword { get; set; }
+        public string PhoneNumber { get; set; }
         
     }
 }

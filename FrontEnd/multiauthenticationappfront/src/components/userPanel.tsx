@@ -4,7 +4,8 @@ import { useAppSelector, useAppDispatch } from "../hooks/hooks";
 import { registerUser } from "../features/userSlice";
 import { SingleFormRow } from "./SingleFormRow";
 import { compareElements } from "../features/tools";
-
+import { useNavigate } from "react-router-dom";
+import { logoutUser } from "../features/userSlice";
 type Props = { Title: string };
 const UserPanel = ({ Title }: Props) => {
   useEffect(() => {
@@ -30,8 +31,9 @@ const UserPanel = ({ Title }: Props) => {
 
   const [values, setValues] = useState(initialState);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const { user } = useAppSelector((store) => store.user);
-  console.log(user);
+  //console.log(user);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -55,7 +57,11 @@ const UserPanel = ({ Title }: Props) => {
     }
   };
 
-  const handleLogout = () => {};
+  const handleLogout = () => {
+    dispatch(logoutUser());
+
+    navigate("/");
+  };
 
   const handleChangeUsername = async (
     e: React.ChangeEvent<HTMLFormElement>
@@ -114,12 +120,10 @@ const UserPanel = ({ Title }: Props) => {
     <div>
       <div className="h">
         <h1>User Panel</h1>
-        <h4>Hello</h4>
+        <h4>Hello {user.payload.userName}</h4>
       </div>
 
       <div className="container">
-        {/* <p> {{userName}} </p>
-        <p> {{email}}</p> */}
         <div className="user-panel">
           <input
             type="button"

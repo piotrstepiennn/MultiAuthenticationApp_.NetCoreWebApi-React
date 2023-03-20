@@ -67,7 +67,12 @@ export const authUser = createAsyncThunk(
 const userSlice = createSlice({
   name: "user",
   initialState,
-  reducers: {},
+  reducers: {
+    logoutUser: (state) => {
+      state.user = null;
+      state.authenticated = false;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(registerUser.pending, (state) => {
@@ -101,10 +106,8 @@ const userSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(authUser.fulfilled, (state, { payload }: any) => {
-        const user = { payload };
         state.isLoading = false;
         state.authenticated = true;
-        state.user = user;
         toast.success(`Success!`);
       })
       .addCase(authUser.rejected, (state, { payload }: any) => {
@@ -131,5 +134,5 @@ const userSlice = createSlice({
 //       });
 //   }
 // }
-
+export const { logoutUser } = userSlice.actions;
 export default userSlice.reducer;
