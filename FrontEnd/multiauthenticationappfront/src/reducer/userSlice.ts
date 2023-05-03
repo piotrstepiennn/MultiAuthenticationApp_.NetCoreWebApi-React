@@ -7,6 +7,7 @@ interface initialStateTypes {
   registered: any | null;
   user: any | null;
   authenticated: boolean;
+  solvedCaptcha: boolean;
 }
 
 interface user {
@@ -24,6 +25,7 @@ const initialState: initialStateTypes = {
   registered: null,
   user: null,
   authenticated: false,
+  solvedCaptcha: false,
 };
 
 export const registerUser = createAsyncThunk(
@@ -119,6 +121,16 @@ const userSlice = createSlice({
     logoutUser: (state) => {
       state.user = null;
       state.authenticated = false;
+    },
+    updateCaptchaResult: (state, result) => {
+      console.log(result);
+      if (result.payload === true) {
+        state.solvedCaptcha = true;
+        toast.success(`Captcha Solved!`);
+      } else {
+        state.solvedCaptcha = false;
+        toast.error(`Try Again!`);
+      }
     },
   },
   extraReducers: (builder) => {
@@ -218,5 +230,5 @@ const userSlice = createSlice({
 //       });
 //   }
 // }
-export const { logoutUser } = userSlice.actions;
+export const { logoutUser, updateCaptchaResult } = userSlice.actions;
 export default userSlice.reducer;

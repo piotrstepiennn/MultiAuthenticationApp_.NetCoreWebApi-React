@@ -1,0 +1,67 @@
+@import "https://fonts.googleapis.com/css?family=Poppins:400,700";
+body {
+  height: 100%;
+  width: 100%;
+  font-family: Poppins;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
+}
+body .builder {
+  color: #000000;
+}
+body .builder #canvas {
+  overflow: hidden;
+}
+body .builder .topbar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  z-index: 9;
+  background: #000308;
+  box-shadow: 0px 3px 12px rgba(0, 0, 0, 0.15);
+  transition: all 0.15s ease-in-out;
+}
+body .builder .topbar .section {
+  margin-left: 30px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+body .builder .topbar .section:first-child {
+  margin-left: 0;
+}
+body .builder .topbar .section .button {
+  padding: 15px 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: fade(#a0ccff, 40);
+  transition: all 0.15s ease-in-out;
+  color: #ffffff;
+}
+body .builder .topbar .section .button:hover {
+  color: #a0ccff;
+  cursor: pointer;
+}
+body .builder .topbar .section .button .text {
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 0.65em;
+}
+body .builder .scene {
+  position: absolute;
+  height: 50%;
+  width: 50%;
+  pointer-events: none;
+  transition: transform 0.15s ease-in-out;
+}
+body .builder .scene * {
+  pointer-events: auto;
+}/*# sourceMappingURL=styles.css.map */

@@ -1,11 +1,22 @@
-import { configureStore } from "@reduxjs/toolkit";
-import userSlice from "./userSlice";
+import { createStore, applyMiddleware } from "redux";
+import thunkMiddleware from "redux-thunk";
+//import userSlice from "../reducer/userSlice";
+//import builder from "../reducer/builder";
+//import scene from "../reducer/scene";
+import reducer from "../reducer";
+export function setupStore(initialState?: any) {
+  return createStore(reducer, initialState, applyMiddleware(thunkMiddleware));
+}
 
-export const store = configureStore({
-  reducer: {
-    user: userSlice,
-  },
-});
+export const store = setupStore();
+
+// export const store = configureStore({
+//   reducer: {
+//     builder: builder,
+//     scene: scene,
+//     user: userSlice,
+//   },
+// });
 
 // Infer the `RootState` and `AppDispatch` types from the store itself
 export type RootState = ReturnType<typeof store.getState>;

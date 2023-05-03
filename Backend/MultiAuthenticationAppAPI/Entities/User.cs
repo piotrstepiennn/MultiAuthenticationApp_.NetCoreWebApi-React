@@ -15,13 +15,17 @@ namespace MultiAuthenticationAppAPI.Entities
         public string Question { get; set; }
         [Required]
         public string Answer { get; set; }
+        [MaxLength(4)]
         public string? EmailAuthcode { get; set; }
+        [MaxLength(4)]
         public string? MobileAppAuthcode { get; set; }
         [Required]
         public string AuthPassword { get; set; }
         [Required]
         public string MobilePassword { get; set; }
         public string PhoneNumber { get; set; }
+        [MaxLength(4)]
+        public string PhoneNumberAuthCode { get; set; }
         
     }
 }

@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "../hooks/hooks";
 import { SingleFormRow } from "./SingleFormRow";
 //import { addUserToLocalStorage } from "../features/localStorage";
-import { loginUser } from "../features/userSlice";
+import { loginUser } from "../reducer/userSlice";
 
 type Props = { Title: string };
 const LoginForm = ({ Title }: Props) => {
@@ -24,10 +24,15 @@ const LoginForm = ({ Title }: Props) => {
   };
 
   const [values, setValues] = useState(initialState);
-  const { user, isLoading } = useAppSelector((store) => store.user);
+  const { user, isLoading, solvedCaptcha } = useAppSelector(
+    (store) => store.user
+  );
   useEffect(() => {
     if (user) {
       navigate("/auth");
+    }
+    if (solvedCaptcha === false) {
+      navigate("/");
     }
   }, [user, navigate]);
   //const dispatch = useDispatch();

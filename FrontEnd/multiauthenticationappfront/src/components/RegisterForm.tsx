@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { SingleFormRow } from "./SingleFormRow";
 //import { useSelector, useDispatch, useStore } from "react-redux";
 import { useAppSelector, useAppDispatch } from "../hooks/hooks";
-import { registerUser } from "../features/userSlice";
+import { registerUser } from "../reducer/userSlice";
 import { compareElements } from "../features/tools";
 import data from "./questions.json";
 

@@ -2,9 +2,8 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { SingleFormRow } from "./SingleFormRow";
 import { useNavigate } from "react-router-dom";
-//import { useSelector, useDispatch, useStore } from "react-redux";
 import { useAppSelector, useAppDispatch } from "../hooks/hooks";
-import { authUser } from "../features/userSlice";
+import { authUser } from "../reducer/userSlice";
 import data from "./questions.json";
 
 type Props = { Title: string };
@@ -29,6 +28,7 @@ const AuthForm = ({ Title }: Props) => {
   const initialState = {
     emailCode: "",
     mobileAppCode: "",
+    phoneAuthCode: "",
     randomPassword: "",
     questionAnswer: "",
     isError: false,
@@ -64,7 +64,13 @@ const AuthForm = ({ Title }: Props) => {
 
   const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const { emailCode, mobileAppCode, randomPassword, questionAnswer } = values;
+    const {
+      emailCode,
+      mobileAppCode,
+      randomPassword,
+      questionAnswer,
+      phoneAuthCode,
+    } = values;
 
     if (user) {
       dispatch(
@@ -74,6 +80,7 @@ const AuthForm = ({ Title }: Props) => {
           MobileAppAuthcode: mobileAppCode,
           AuthPassword: randomPassword,
           Answer: questionAnswer,
+          PhoneNumberAuthCode: phoneAuthCode,
         })
       );
     }
@@ -116,6 +123,14 @@ const AuthForm = ({ Title }: Props) => {
             value={values.randomPassword}
             handleChange={handleChange}
             labelText="Password Letters"
+          />
+          <h4>Enter the code sent to your phone number.</h4>
+          <SingleFormRow
+            type="text"
+            name="phoneAuthCode"
+            value={values.phoneAuthCode}
+            handleChange={handleChange}
+            labelText="Phone Authcode"
           />
           <h4>Answer the authentication question</h4>
           <p> {authQuestion ? authQuestion : "Can't load AuthQuestion!"} </p>

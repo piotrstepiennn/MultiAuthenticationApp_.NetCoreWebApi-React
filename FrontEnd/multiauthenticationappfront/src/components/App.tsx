@@ -4,15 +4,20 @@ import RegisterForm from "./RegisterForm";
 import AuthForm from "./AuthForm";
 import UserPanel from "./userPanel";
 import LoginForm from "./LoginForm";
+import StartPage from "./StartPage";
+import CaptchaRedirect from "./CaptchaRedirect";
 import { ToastContainer } from "react-toastify";
 import { ProtectedRoute } from "../features/ProtectedRoute";
 import "react-toastify/dist/ReactToastify.css";
+import "../../public/style.css";
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<LoginForm Title="Login" />} />
+        <Route path="/" element={<StartPage Title="Hello" />} />
+        <Route path="/captcha" element={<CaptchaRedirect />} />
+        <Route path="/login" element={<LoginForm Title="Login" />} />
         <Route path="/register" element={<RegisterForm Title="Register" />} />
 
         <Route

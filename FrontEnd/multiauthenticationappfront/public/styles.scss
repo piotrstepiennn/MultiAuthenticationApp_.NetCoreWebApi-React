@@ -1,0 +1,106 @@
+@import "https://fonts.googleapis.com/css?family=Poppins:400,700";
+
+$primary-dark-blue: #000308;
+$secondary-blue: #22386e;
+$tertiary-blue: #a0ccff;
+
+$white: #ffffff;
+$black: #000000;
+
+// TEXT
+$text-color-primary: $white;
+$text-color-secondary: $tertiary-blue;
+
+$base-font-family: "Poppins";
+
+// LAYOUT
+$base-margin: 15px;
+$base-margin-small: $base-margin / 2;
+$base-padding: 15px;
+$base-padding-small: $base-padding / 2;
+
+// TRANSITIONS
+$base-transition-time: 0.15s;
+
+body {
+  height: 100%;
+  width: 100%;
+  font-family: Poppins;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
+  //builder
+  .builder {
+    color: $black;
+
+    #canvas {
+      overflow: hidden;
+      //max-width: 1000px;
+    }
+
+    //topbar
+    .topbar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      width: 100%;
+      z-index: 9;
+      background: $primary-dark-blue;
+      box-shadow: 0px 3px 12px rgba(0, 0, 0, 0.15);
+      transition: all $base-transition-time ease-in-out;
+
+      //section
+      .section {
+        margin-left: $base-margin * 2;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+
+        &:first-child {
+          margin-left: 0;
+        }
+
+        // button
+        $button-color-default: fade($text-color-secondary, 40);
+
+        .button {
+          padding: $base-padding $base-padding * 2;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          color: $button-color-default;
+          transition: all $base-transition-time ease-in-out;
+          color: $white;
+
+          &:hover {
+            color: $text-color-secondary;
+            cursor: pointer;
+          }
+          .text {
+            text-transform: uppercase;
+            font-weight: 700;
+            font-size: 0.65em;
+          }
+        }
+      }
+    }
+    //scene
+    .scene {
+      position: absolute;
+      height: 50%;
+      width: 50%;
+      pointer-events: none;
+      transition: transform $base-transition-time ease-in-out;
+
+      // allow pointer events to all children
+      * {
+        pointer-events: auto;
+      }
+    }
+  }
+}

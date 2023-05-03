@@ -5,11 +5,11 @@ import {
   changeUserUsername,
   changeUserEmail,
   changeUserPassword,
-} from "../features/userSlice";
+} from "../reducer/userSlice";
 import { SingleFormRow } from "./SingleFormRow";
 import { compareElements } from "../features/tools";
 import { useNavigate } from "react-router-dom";
-import { logoutUser } from "../features/userSlice";
+import { logoutUser } from "../reducer/userSlice";
 type Props = { Title: string };
 const UserPanel = ({ Title }: Props) => {
   useEffect(() => {

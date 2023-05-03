@@ -51,15 +51,14 @@ namespace MultiAuthenticationAppAPI.Services
 
             string mobileAuthCode = GenerateRandomNumber();
             string emailAuthCode = GenerateRandomNumber();
+            string phoneAuthCode = GenerateRandomNumber();
 
             user.EmailAuthcode = emailAuthCode;
             user.MobileAppAuthcode = mobileAuthCode;
-
+            user.PhoneNumberAuthCode = phoneAuthCode;
             _dbContext.Users.Update(user);
             _dbContext.SaveChanges();
-
-            // TODO: mobileauthcode jednoczesnie bedzie numerkami dodatkowego hasla uwierzytelniajacego, napisac o tym wiadomosc w emailu.
-            // ponizej dodac wysylanie emaili
+            
             string emailFrom = "rokfarm32123@gmail.com";
             string emailPassword = "jxtbmzsvowosipry";
             MailMessage message = new MailMessage();
@@ -158,7 +157,7 @@ namespace MultiAuthenticationAppAPI.Services
                 throw new BadRequestException("Something went wrong!");
             }
 
-            if(dto.EmailAuthcode.Length != 4  || dto.AuthPassword.Length != 4  || dto.MobileAppAuthcode.Length != 4) 
+            if(dto.EmailAuthcode.Length != 4  || dto.AuthPassword.Length != 4  || dto.MobileAppAuthcode.Length != 4 || dto.PhoneNumberAuthCode.Length != 4) 
             {
                 throw new BadRequestException("Wrong data length!");
             }
@@ -175,7 +174,7 @@ namespace MultiAuthenticationAppAPI.Services
                 if (user.AuthPassword[(letterIndex[i])-1] != dto.AuthPassword[i]) return false;
             }
 
-            if (user.EmailAuthcode == dto.EmailAuthcode && user.MobileAppAuthcode == dto.MobileAppAuthcode && user.Answer == dto.Answer)
+            if (user.EmailAuthcode == dto.EmailAuthcode && user.MobileAppAuthcode == dto.MobileAppAuthcode && user.Answer == dto.Answer && user.PhoneNumberAuthCode == dto.PhoneNumberAuthCode)
             {
                 return true;
             }
