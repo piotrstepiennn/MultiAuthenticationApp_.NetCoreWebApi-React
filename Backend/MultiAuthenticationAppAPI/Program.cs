@@ -20,6 +20,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<UserDbContext>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IHashingService, HashingService>();
 builder.Services.AddScoped<IPasswordHasher<User>,PasswordHasher<User>>();
 builder.Services.AddScoped<IValidator<User>, RegisterUserValidator>();
 builder.Services.AddScoped<IValidator<ChangeEmailDto>, ChangeEmailValidator>();
@@ -32,7 +33,7 @@ builder.Services.AddScoped<ErrorHandlingMiddleware>();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("FrontEndClient", builder =>
-        builder.AllowAnyMethod().AllowAnyHeader().WithOrigins("http://localhost:4000")
+        builder.AllowAnyMethod().AllowAnyHeader().WithOrigins("https://localhost:4000")
     );
 });
 builder.Services.AddAuthentication(option =>
@@ -63,8 +64,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 //app.UseHttpsRedirection();
-app.UseAuthentication();
 
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllers();
 

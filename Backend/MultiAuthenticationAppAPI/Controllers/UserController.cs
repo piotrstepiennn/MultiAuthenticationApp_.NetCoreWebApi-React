@@ -1,7 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MultiAuthenticationAppAPI.Entities;
 using MultiAuthenticationAppAPI.Models;
 using MultiAuthenticationAppAPI.Services;
+using System.Buffers.Text;
+using System.Security.Cryptography;
+using System.Text;
+using System.Text.Json;
 
 namespace MultiAuthenticationAppAPI.Controllers
 {
@@ -9,10 +14,12 @@ namespace MultiAuthenticationAppAPI.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
+        private readonly IHashingService _hashingService;
 
-        public UserController(IUserService userService)
+        public UserController(IUserService userService, IHashingService hashingService)
         {
             _userService = userService; 
+            _hashingService = hashingService;
         }
 
         [HttpPost("/register")]
@@ -25,6 +32,14 @@ namespace MultiAuthenticationAppAPI.Controllers
         [HttpPost("/login")]
         public ActionResult Login([FromBody] LoginDto dto )
         {
+            var login = new HashDto { username = dto.UserName, password = dto.Password };
+            var hash = _hashingService.ComputeSha1Hash(login);
+
+            if(hash != dto.Hash)
+            {
+                return BadRequest("Data integrity error!");
+            }
+
             _userService.GenerateAuthCodes(dto);
             string token = _userService.GenerateJwt(dto);
             string authQuestion = _userService.GetAuthQuestion(dto);
@@ -50,6 +65,7 @@ namespace MultiAuthenticationAppAPI.Controllers
         }
 
         [HttpPost("/user/changeUsername")]
+        [Authorize]
         public ActionResult ChangeUserName([FromBody] ChangeUsernameDto dto)
         {
             bool result = _userService.ChangeUsername(dto);

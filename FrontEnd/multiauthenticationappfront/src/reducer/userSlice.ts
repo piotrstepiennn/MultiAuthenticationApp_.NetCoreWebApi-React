@@ -1,11 +1,13 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 import axios from "../api/axios";
+import { createHmac } from "crypto";
 
 interface initialStateTypes {
   isLoading: boolean;
   registered: any | null;
   user: any | null;
+  token: any | null;
   authenticated: boolean;
   solvedCaptcha: boolean;
 }
@@ -24,6 +26,7 @@ const initialState: initialStateTypes = {
   isLoading: false,
   registered: null,
   user: null,
+  token: null,
   authenticated: false,
   solvedCaptcha: false,
 };
@@ -46,9 +49,16 @@ export const loginUser = createAsyncThunk(
   "user/loginUser",
   async (user: object | null, thunkAPI: any) => {
     try {
-      const resp = await axios.post("/login", user);
+      const secretKey = "mySecretKey123";
+      const login = JSON.stringify(user);
+      const hmac = createHmac("sha1", secretKey);
+      hmac.update(login);
+      const hash = hmac.digest("base64");
+      const data = { ...user, hash };
+      const resp = await axios.post("/login", data);
       return resp.data;
     } catch (error) {
+      console.log(error);
       return thunkAPI.rejectWithValue(error.response.data);
     }
   }
@@ -68,9 +78,15 @@ export const authUser = createAsyncThunk(
 
 export const changeUserUsername = createAsyncThunk(
   "user/changeUsername",
-  async (user: object | null, thunkAPI: any) => {
+  async (user: any, thunkAPI: any) => {
     try {
-      const resp = await axios.post("/user/changeUsername", user);
+      console.log(user);
+      const resp = await axios.post("/user/changeUsername", user, {
+        headers: {
+          Authorization: "Bearer " + user.token,
+        },
+      });
+      console.log(resp.data);
       return resp.data;
     } catch (error) {
       if (typeof error.response.data === "object") {
@@ -155,6 +171,8 @@ const userSlice = createSlice({
         const user = { payload };
         state.isLoading = false;
         state.user = user;
+        state.token = payload.token;
+        console.log(user);
         toast.success(`Authenticate yourself!`);
       })
       .addCase(loginUser.rejected, (state, { payload }: any) => {

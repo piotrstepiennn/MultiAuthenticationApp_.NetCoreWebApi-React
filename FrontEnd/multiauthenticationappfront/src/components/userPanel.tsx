@@ -36,7 +36,7 @@ const UserPanel = ({ Title }: Props) => {
   const [values, setValues] = useState(initialState);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { user } = useAppSelector((store) => store.user);
+  const { user, token } = useAppSelector((store) => store.user);
   //console.log(user);
 
   const handleChange = (
@@ -85,6 +85,7 @@ const UserPanel = ({ Title }: Props) => {
     }
     dispatch(
       changeUserUsername({
+        token: token,
         username: values.currentUsername,
         newUsername: values.newUsername,
         email: user.payload.email,

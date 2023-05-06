@@ -3,6 +3,7 @@ const webpack = require("webpack");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const NodePolyfillPlugin = require("node-polyfill-webpack-plugin");
+const fs = require("fs");
 const jsDirs = [path.resolve(__dirname, "src")];
 
 module.exports = {
@@ -20,7 +21,7 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      title: "Multiauthentication App",
+      title: "MultiauthenticationApp",
       template: path.resolve(__dirname, "index.html"),
     }),
     new MiniCssExtractPlugin(),
@@ -68,5 +69,9 @@ module.exports = {
     compress: true,
     hot: true,
     port: 4000,
+    https: {
+      key: fs.readFileSync("./SSL/MultiauthenticationApp+12-key.pem"),
+      cert: fs.readFileSync("./SSL/MultiauthenticationApp+12.pem"),
+    },
   },
 };

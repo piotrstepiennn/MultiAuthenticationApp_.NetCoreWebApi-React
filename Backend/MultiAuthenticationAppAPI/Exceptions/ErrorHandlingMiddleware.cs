@@ -22,6 +22,7 @@
                 context.Response.StatusCode = 400;
                 await context.Response.WriteAsync(badRequestException.Message);
             }
+
             catch(Exception ex)
             {
                 context.Response.StatusCode=500;
