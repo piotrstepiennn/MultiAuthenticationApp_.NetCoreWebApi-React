@@ -1,4 +1,4 @@
-﻿namespace MultiAuthenticationAppAPI
+﻿namespace MultiAuthenticationAppAPI.Configuration
 {
     public class AuthenticationSettings
     {

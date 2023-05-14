@@ -8014,5 +8014,247 @@
       "rotation": 0,
       "translation": 0
     }
+  ],
+  [
+    {
+      "position": { "x": -12.5, "y": 16.666666666666668, "z": -12.5 },
+      "intersect": {
+        "distance": 929.314300184174,
+        "point": { "x": -9.473601234880384, "y": 0, "z": -7.713324196729076 },
+        "object": {
+          "metadata": {
+            "version": 4.5,
+            "type": "Object",
+            "generator": "Object3D.toJSON"
+          },
+          "geometries": [
+            {
+              "uuid": "3D59EF0B-7ADE-41D0-864E-9AB86BA6A55D",
+              "type": "PlaneBufferGeometry",
+              "width": 3000,
+              "height": 3000
+            }
+          ],
+          "materials": [
+            {
+              "uuid": "1281BF6C-9B2D-46FF-9BBA-9ADDFE8AEA5D",
+              "type": "ShadowMaterial",
+              "color": 0,
+              "opacity": 0.2,
+              "transparent": true,
+              "depthFunc": 3,
+              "depthTest": true,
+              "depthWrite": true
+            }
+          ],
+          "object": {
+            "uuid": "0506BD28-718A-40B8-B705-674BB2EECAAA",
+            "type": "Mesh",
+            "receiveShadow": true,
+            "layers": 1,
+            "matrix": [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
+            "geometry": "3D59EF0B-7ADE-41D0-864E-9AB86BA6A55D",
+            "material": "1281BF6C-9B2D-46FF-9BBA-9ADDFE8AEA5D"
+          }
+        },
+        "uv": { "x": 0.4968421329217066, "y": 0.5025711080655764 },
+        "face": {
+          "a": 0,
+          "b": 2,
+          "c": 1,
+          "normal": { "x": 0, "y": 1, "z": 6.123234153517416e-17 },
+          "vertexNormals": [],
+          "color": 16777215,
+          "vertexColors": [],
+          "materialIndex": 0
+        },
+        "faceIndex": 0
+      },
+      "color": "#00FF00",
+      "dimensions": { "x": 1, "z": 1 },
+      "rotation": 0,
+      "translation": 0
+    },
+    {
+      "position": { "x": -12.5, "y": 16.666666666666668, "z": 12.5 },
+      "intersect": {
+        "distance": 929.459631593929,
+        "point": {
+          "x": 18.61477965305929,
+          "y": -1.1368683772161603e-13,
+          "z": -8.536551113341744
+        },
+        "object": {
+          "metadata": {
+            "version": 4.5,
+            "type": "Object",
+            "generator": "Object3D.toJSON"
+          },
+          "geometries": [
+            {
+              "uuid": "3D59EF0B-7ADE-41D0-864E-9AB86BA6A55D",
+              "type": "PlaneBufferGeometry",
+              "width": 3000,
+              "height": 3000
+            }
+          ],
+          "materials": [
+            {
+              "uuid": "1281BF6C-9B2D-46FF-9BBA-9ADDFE8AEA5D",
+              "type": "ShadowMaterial",
+              "color": 0,
+              "opacity": 0.2,
+              "transparent": true,
+              "depthFunc": 3,
+              "depthTest": true,
+              "depthWrite": true
+            }
+          ],
+          "object": {
+            "uuid": "0506BD28-718A-40B8-B705-674BB2EECAAA",
+            "type": "Mesh",
+            "receiveShadow": true,
+            "layers": 1,
+            "matrix": [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
+            "geometry": "3D59EF0B-7ADE-41D0-864E-9AB86BA6A55D",
+            "material": "1281BF6C-9B2D-46FF-9BBA-9ADDFE8AEA5D"
+          }
+        },
+        "uv": { "x": 0.5062049265510198, "y": 0.5028455170377806 },
+        "face": {
+          "a": 2,
+          "b": 3,
+          "c": 1,
+          "normal": { "x": 0, "y": 1, "z": 6.123234153517416e-17 },
+          "vertexNormals": [],
+          "color": 16777215,
+          "vertexColors": [],
+          "materialIndex": 0
+        },
+        "faceIndex": 1
+      },
+      "color": "#00FF00",
+      "dimensions": { "x": 1, "z": 1 },
+      "rotation": 0,
+      "translation": 0
+    },
+    {
+      "position": { "x": 12.5, "y": 16.666666666666668, "z": 12.5 },
+      "intersect": {
+        "distance": 925.1785507871697,
+        "point": { "x": 17.590057028474966, "y": 0, "z": 9.711342498929838 },
+        "object": {
+          "metadata": {
+            "version": 4.5,
+            "type": "Object",
+            "generator": "Object3D.toJSON"
+          },
+          "geometries": [
+            {
+              "uuid": "3D59EF0B-7ADE-41D0-864E-9AB86BA6A55D",
+              "type": "PlaneBufferGeometry",
+              "width": 3000,
+              "height": 3000
+            }
+          ],
+          "materials": [
+            {
+              "uuid": "1281BF6C-9B2D-46FF-9BBA-9ADDFE8AEA5D",
+              "type": "ShadowMaterial",
+              "color": 0,
+              "opacity": 0.2,
+              "transparent": true,
+              "depthFunc": 3,
+              "depthTest": true,
+              "depthWrite": true
+            }
+          ],
+          "object": {
+            "uuid": "0506BD28-718A-40B8-B705-674BB2EECAAA",
+            "type": "Mesh",
+            "receiveShadow": true,
+            "layers": 1,
+            "matrix": [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
+            "geometry": "3D59EF0B-7ADE-41D0-864E-9AB86BA6A55D",
+            "material": "1281BF6C-9B2D-46FF-9BBA-9ADDFE8AEA5D"
+          }
+        },
+        "uv": { "x": 0.505863352342825, "y": 0.4967628858336901 },
+        "face": {
+          "a": 2,
+          "b": 3,
+          "c": 1,
+          "normal": { "x": 0, "y": 1, "z": 6.123234153517416e-17 },
+          "vertexNormals": [],
+          "color": 16777215,
+          "vertexColors": [],
+          "materialIndex": 0
+        },
+        "faceIndex": 1
+      },
+      "color": "#00FF00",
+      "dimensions": { "x": 1, "z": 1 },
+      "rotation": 0,
+      "translation": 0
+    },
+    {
+      "position": { "x": 12.5, "y": 16.666666666666668, "z": -12.5 },
+      "intersect": {
+        "distance": 923.6838487936396,
+        "point": { "x": -0.6257505766518712, "y": 0, "z": 16.280669179075403 },
+        "object": {
+          "metadata": {
+            "version": 4.5,
+            "type": "Object",
+            "generator": "Object3D.toJSON"
+          },
+          "geometries": [
+            {
+              "uuid": "3D59EF0B-7ADE-41D0-864E-9AB86BA6A55D",
+              "type": "PlaneBufferGeometry",
+              "width": 3000,
+              "height": 3000
+            }
+          ],
+          "materials": [
+            {
+              "uuid": "1281BF6C-9B2D-46FF-9BBA-9ADDFE8AEA5D",
+              "type": "ShadowMaterial",
+              "color": 0,
+              "opacity": 0.2,
+              "transparent": true,
+              "depthFunc": 3,
+              "depthTest": true,
+              "depthWrite": true
+            }
+          ],
+          "object": {
+            "uuid": "0506BD28-718A-40B8-B705-674BB2EECAAA",
+            "type": "Mesh",
+            "receiveShadow": true,
+            "layers": 1,
+            "matrix": [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
+            "geometry": "3D59EF0B-7ADE-41D0-864E-9AB86BA6A55D",
+            "material": "1281BF6C-9B2D-46FF-9BBA-9ADDFE8AEA5D"
+          }
+        },
+        "uv": { "x": 0.49979141647444936, "y": 0.4945731102736417 },
+        "face": {
+          "a": 2,
+          "b": 3,
+          "c": 1,
+          "normal": { "x": 0, "y": 1, "z": 6.123234153517416e-17 },
+          "vertexNormals": [],
+          "color": 16777215,
+          "vertexColors": [],
+          "materialIndex": 0
+        },
+        "faceIndex": 1
+      },
+      "color": "#00FF00",
+      "dimensions": { "x": 1, "z": 1 },
+      "rotation": 0,
+      "translation": 0
+    }
   ]
 ]

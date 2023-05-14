@@ -5,7 +5,6 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const NodePolyfillPlugin = require("node-polyfill-webpack-plugin");
 const fs = require("fs");
 const jsDirs = [path.resolve(__dirname, "src")];
-const Dotenv = require("dotenv-webpack");
 
 module.exports = {
   resolve: {
@@ -27,7 +26,6 @@ module.exports = {
     }),
     new MiniCssExtractPlugin(),
     new NodePolyfillPlugin(),
-    new Dotenv(),
   ],
   module: {
     rules: [

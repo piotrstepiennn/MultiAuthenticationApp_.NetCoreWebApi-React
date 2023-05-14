@@ -14,7 +14,8 @@ const Topbar = ({ grid, objects, importScene }: any) => {
   const loadedObjCount = useRef(null);
   const loadedModelIndex = useRef(null);
   useEffect(() => {
-    loadedModelIndex.current = Math.floor(Math.random() * 3);
+    loadedModelIndex.current = Math.floor(Math.random() * 4);
+    //loadedModelIndex.current = 3;
     loadedObjCount.current = _importFile(models[loadedModelIndex.current]);
   }, []);
 
@@ -125,14 +126,19 @@ const Topbar = ({ grid, objects, importScene }: any) => {
   }
 
   function resetScene() {
-    loadedModelIndex.current = Math.floor(Math.random() * 3);
+    loadedModelIndex.current = Math.floor(Math.random() * 4);
     loadedObjCount.current = _importFile(models[loadedModelIndex.current]);
   }
 
   return (
     <div className="topbar">
       <div className="section">
-        <Button active={grid} onClick={resetScene} icon="" text="Reset Scene" />
+        <Button
+          active={grid}
+          onClick={resetScene}
+          icon=""
+          text="Change Test Object"
+        />
       </div>
 
       <div className="section">
