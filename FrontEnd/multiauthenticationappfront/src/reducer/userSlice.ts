@@ -10,6 +10,8 @@ interface initialStateTypes {
   token: any | null;
   authenticated: boolean;
   solvedCaptcha: boolean;
+  solvedCaptchaTime: Date;
+  numberOfLoginAttempts: number;
 }
 
 interface user {
@@ -29,6 +31,8 @@ const initialState: initialStateTypes = {
   token: null,
   authenticated: false,
   solvedCaptcha: false,
+  solvedCaptchaTime: null,
+  numberOfLoginAttempts: 0,
 };
 
 export const registerUser = createAsyncThunk(
@@ -49,7 +53,7 @@ export const loginUser = createAsyncThunk(
   "user/loginUser",
   async (user: object | null, thunkAPI: any) => {
     try {
-      const secretKey = "mySecretKey123";
+      const secretKey = process.env.HASH_SECRETKEY;
       const login = JSON.stringify(user);
       const hmac = createHmac("sha1", secretKey);
       hmac.update(login);
@@ -137,20 +141,23 @@ const userSlice = createSlice({
     logoutUser: (state) => {
       state.user = null;
       state.authenticated = false;
+      state.solvedCaptcha = false;
     },
     updateCaptchaResult: (state, result) => {
-      console.log(result);
+      //console.log(result);
       if (result.payload === true) {
         state.solvedCaptcha = true;
+        state.solvedCaptchaTime = new Date();
         toast.success(`Captcha Solved!`);
       } else {
         state.solvedCaptcha = false;
-        toast.error(`Try Again!`);
+        toast.error(`Captcha failed or expired!`);
       }
     },
   },
   extraReducers: (builder) => {
     builder
+      //register
       .addCase(registerUser.pending, (state) => {
         state.isLoading = true;
       })
@@ -165,6 +172,7 @@ const userSlice = createSlice({
       })
       //login
       .addCase(loginUser.pending, (state) => {
+        state.numberOfLoginAttempts += 1;
         state.isLoading = true;
       })
       .addCase(loginUser.fulfilled, (state, { payload }) => {
@@ -172,6 +180,7 @@ const userSlice = createSlice({
         state.isLoading = false;
         state.user = user;
         state.token = payload.token;
+        state.numberOfLoginAttempts = 0;
         console.log(user);
         toast.success(`Authenticate yourself!`);
       })

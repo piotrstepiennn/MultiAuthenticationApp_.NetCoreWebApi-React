@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "../hooks/hooks";
 import { SingleFormRow } from "./SingleFormRow";
 //import { addUserToLocalStorage } from "../features/localStorage";
-import { loginUser } from "../reducer/userSlice";
+import { loginUser, updateCaptchaResult } from "../reducer/userSlice";
 
 type Props = { Title: string };
 const LoginForm = ({ Title }: Props) => {
@@ -24,15 +24,20 @@ const LoginForm = ({ Title }: Props) => {
   };
 
   const [values, setValues] = useState(initialState);
-  const { user, isLoading, solvedCaptcha } = useAppSelector(
-    (store) => store.user
-  );
+  const {
+    user,
+    isLoading,
+    solvedCaptcha,
+    solvedCaptchaTime,
+    numberOfLoginAttempts,
+  } = useAppSelector((store) => store.user);
   useEffect(() => {
-    if (user) {
-      navigate("/auth");
-    }
     if (solvedCaptcha === false) {
       navigate("/");
+    }
+
+    if (user) {
+      navigate("/auth");
     }
   }, [user, navigate]);
   //const dispatch = useDispatch();
@@ -63,13 +68,29 @@ const LoginForm = ({ Title }: Props) => {
     e.preventDefault();
     const { username, password } = values;
 
+    try {
+      const currentTime = new Date().getTime();
+      const diffInSeconds = (currentTime - solvedCaptchaTime.getTime()) / 1000;
+      if (diffInSeconds > 300) {
+        dispatch(updateCaptchaResult(false));
+        navigate("/");
+        return;
+      }
+    } catch (error) {
+      navigate("/");
+    }
+
+    if (numberOfLoginAttempts > 3) {
+      dispatch(updateCaptchaResult(false));
+      navigate("/");
+      return;
+    }
     dispatch(
       loginUser({
         username: username,
         password: password,
       })
     );
-
     return;
   };
 

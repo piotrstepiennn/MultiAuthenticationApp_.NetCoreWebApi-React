@@ -3,10 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using MultiAuthenticationAppAPI.Entities;
 using MultiAuthenticationAppAPI.Models;
 using MultiAuthenticationAppAPI.Services;
-using System.Buffers.Text;
-using System.Security.Cryptography;
-using System.Text;
-using System.Text.Json;
 
 namespace MultiAuthenticationAppAPI.Controllers
 {

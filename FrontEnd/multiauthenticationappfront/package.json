@@ -61,6 +61,7 @@
     "babel-preset-react": "^7.0.0-beta.3",
     "crypto-js": "^4.1.1",
     "css-loader": "^6.7.3",
+    "dotenv-webpack": "^8.0.1",
     "file-loader": "^6.2.0",
     "html-loader": "^4.2.0",
     "html-webpack-plugin": "^5.5.1",

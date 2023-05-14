@@ -132,7 +132,12 @@ const Topbar = ({ grid, objects, importScene }: any) => {
   return (
     <div className="topbar">
       <div className="section">
-        <Button active={grid} onClick={resetScene} icon="" text="Reset Scene" />
+        <Button
+          active={grid}
+          onClick={resetScene}
+          icon=""
+          text="Change Test Object"
+        />
       </div>
 
       <div className="section">

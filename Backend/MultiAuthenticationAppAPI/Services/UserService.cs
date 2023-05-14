@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.IdentityModel.Tokens;
+using MultiAuthenticationAppAPI.Configuration;
 using MultiAuthenticationAppAPI.Entities;
 using MultiAuthenticationAppAPI.Exceptions;
 using MultiAuthenticationAppAPI.Models;
-using System.Collections;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Net.Mail;
@@ -14,7 +14,6 @@ using System.Text;
 
 namespace MultiAuthenticationAppAPI.Services
 {
-
     public interface IUserService
     {
         void RegisterUser(User user);
@@ -33,12 +32,16 @@ namespace MultiAuthenticationAppAPI.Services
         private readonly UserDbContext _dbContext;
         private readonly IPasswordHasher<User> _passwordHasher;
         private readonly AuthenticationSettings _authenticationSettings;
+        private readonly Secrets _secrets;
+        private readonly ILogger<UserService> _logger;
 
-        public UserService(UserDbContext dbContext, IPasswordHasher<User> passwordHasher, AuthenticationSettings authenticationSettings)
+        public UserService(UserDbContext dbContext, IPasswordHasher<User> passwordHasher, AuthenticationSettings authenticationSettings, ILogger<UserService> logger, Secrets secrets )
         {
             _dbContext = dbContext;
             _passwordHasher = passwordHasher;
             _authenticationSettings = authenticationSettings;
+            _logger = logger;
+            _secrets = secrets;
         }
 
         public void GenerateAuthCodes(LoginDto dto)
@@ -58,9 +61,11 @@ namespace MultiAuthenticationAppAPI.Services
             user.PhoneNumberAuthCode = phoneAuthCode;
             _dbContext.Users.Update(user);
             _dbContext.SaveChanges();
-            
-            string emailFrom = "rokfarm32123@gmail.com";
-            string emailPassword = "jxtbmzsvowosipry";
+
+            //string emailFrom = "rokfarm32123@gmail.com";
+            string emailFrom = _secrets.GMAIL_ACCOUNT;
+            //string emailPassword = "jxtbmzsvowosipry";
+            string emailPassword = _secrets.GMAIL_PASSWORD;
             MailMessage message = new MailMessage();
             message.From = new MailAddress(emailFrom);
             message.Subject = "Confirm Your Identity!";
@@ -91,6 +96,8 @@ namespace MultiAuthenticationAppAPI.Services
             {
                 throw new BadRequestException("Invalid Username or password");
             }
+
+            _logger.LogInformation($"User with username {user.UserName} invoked login action.");
 
             var claims = new List<Claim>()
             {
@@ -124,6 +131,7 @@ namespace MultiAuthenticationAppAPI.Services
 
         public void RegisterUser(User user)
         {
+            _logger.LogInformation($"New account created with username {user.UserName}.");
             var hashedPassword = _passwordHasher.HashPassword(user,user.Password);
             var hashedMobilePassword = _passwordHasher.HashPassword(user, user.MobilePassword);
             user.Password = hashedPassword;
@@ -135,6 +143,7 @@ namespace MultiAuthenticationAppAPI.Services
 
         public string MobileLogin(MobileLoginDto dto)
         {
+            _logger.LogInformation($"Mobile Login action invoked by username with email {dto.Email}.");
             var user = _dbContext.Users.FirstOrDefault(u => u.Email == dto.Email);
             if (user is null)
             {
@@ -151,6 +160,7 @@ namespace MultiAuthenticationAppAPI.Services
 
         public bool Authenticate(AuthDto dto)
         {
+            _logger.LogInformation($"user with username {dto.UserName} invoked authenticate action.");
             var user = _dbContext.Users.FirstOrDefault(u => u.UserName == dto.UserName);
             if (user is null)
             {
@@ -201,6 +211,7 @@ namespace MultiAuthenticationAppAPI.Services
             {
                 throw new BadRequestException("Invalid username!");
             }
+            _logger.LogInformation($"User with username {dto.UserName} changeUsername action invoked");
             var check = _dbContext.Users.FirstOrDefault(u => u.UserName == dto.NewUserName);
             if ( check is not null) { return false; }
 
@@ -219,6 +230,7 @@ namespace MultiAuthenticationAppAPI.Services
             {
                 throw new BadRequestException("Invalid current Email!");
             }
+            _logger.LogInformation($"User with Email {dto.Email} changeEmail action invoked");
             var check = _dbContext.Users.FirstOrDefault(u => u.Email == dto.NewEmail);
             if (check is not null) { return false; }
 
@@ -246,7 +258,7 @@ namespace MultiAuthenticationAppAPI.Services
             {
                 throw new BadRequestException("Invalid current password!");
             }
-
+            _logger.LogInformation($"User with username {dto.Username} changeEmail action invoked");
             user.Password = dto.NewPassword;
             var hashedPassword = _passwordHasher.HashPassword(user, user.Password);
             user.Password = hashedPassword;

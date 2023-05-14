@@ -2,18 +2,23 @@ using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
-using MultiAuthenticationAppAPI;
+using MultiAuthenticationAppAPI.Configuration;
 using MultiAuthenticationAppAPI.Entities;
 using MultiAuthenticationAppAPI.Exceptions;
 using MultiAuthenticationAppAPI.Models;
 using MultiAuthenticationAppAPI.Services;
 using MultiAuthenticationAppAPI.Validators;
+using NLog.Web;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 var authenticationSettings = new AuthenticationSettings();
+var secrets = new Secrets();
 // Add services to the container.
 
+builder.Logging.ClearProviders();
+builder.Logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
+builder.Host.UseNLog();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -29,6 +34,7 @@ builder.Services.AddScoped<IValidator<ChangePasswordDto>, ChangePasswordValidato
 builder.Services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
 //builder.Services.AddControllers().AddFluentValidation();
 builder.Services.AddSingleton(authenticationSettings);
+builder.Services.AddSingleton(secrets);
 builder.Services.AddScoped<ErrorHandlingMiddleware>();
 builder.Services.AddCors(options =>
 {
@@ -57,6 +63,7 @@ var app = builder.Build();
 app.UseMiddleware<ErrorHandlingMiddleware>();
 app.UseCors("FrontEndClient");
 app.Configuration.GetSection("Authentication").Bind(authenticationSettings);
+app.Configuration.GetSection("Secrets").Bind(secrets);
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
