@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.IdentityModel.Tokens;
 using MultiAuthenticationAppAPI.Configuration;
 using MultiAuthenticationAppAPI.Entities;
@@ -8,9 +7,10 @@ using MultiAuthenticationAppAPI.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Net.Mail;
-using System.Reflection;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
+
 
 namespace MultiAuthenticationAppAPI.Services
 {
@@ -34,6 +34,7 @@ namespace MultiAuthenticationAppAPI.Services
         private readonly AuthenticationSettings _authenticationSettings;
         private readonly Secrets _secrets;
         private readonly ILogger<UserService> _logger;
+        private static readonly HttpClient _client = new HttpClient();
 
         public UserService(UserDbContext dbContext, IPasswordHasher<User> passwordHasher, AuthenticationSettings authenticationSettings, ILogger<UserService> logger, Secrets secrets )
         {
@@ -44,7 +45,7 @@ namespace MultiAuthenticationAppAPI.Services
             _secrets = secrets;
         }
 
-        public void GenerateAuthCodes(LoginDto dto)
+        public async void GenerateAuthCodes(LoginDto dto)
         {
             var user = _dbContext.Users.FirstOrDefault(u => u.UserName == dto.UserName);
             if (user is null)
@@ -52,19 +53,16 @@ namespace MultiAuthenticationAppAPI.Services
                 throw new BadRequestException("Invalid Username or password");
             }
 
-            string mobileAuthCode = GenerateRandomNumber();
-            string emailAuthCode = GenerateRandomNumber();
-            string phoneAuthCode = GenerateRandomNumber();
+            string mobileAuthCode = GenerateAuthCode();
+            string emailAuthCode = GenerateAuthCode();
 
             user.EmailAuthcode = emailAuthCode;
             user.MobileAppAuthcode = mobileAuthCode;
-            user.PhoneNumberAuthCode = phoneAuthCode;
             _dbContext.Users.Update(user);
             _dbContext.SaveChanges();
 
-            //string emailFrom = "rokfarm32123@gmail.com";
+            //sending email
             string emailFrom = _secrets.GMAIL_ACCOUNT;
-            //string emailPassword = "jxtbmzsvowosipry";
             string emailPassword = _secrets.GMAIL_PASSWORD;
             MailMessage message = new MailMessage();
             message.From = new MailAddress(emailFrom);
@@ -81,6 +79,10 @@ namespace MultiAuthenticationAppAPI.Services
             };
 
             //smtpClient.Send(message);
+            smtpClient.Dispose();
+
+            //sending sms
+
         }
 
         public string GenerateJwt(LoginDto dto)
@@ -167,7 +169,7 @@ namespace MultiAuthenticationAppAPI.Services
                 throw new BadRequestException("Something went wrong!");
             }
 
-            if(dto.EmailAuthcode.Length != 4  || dto.AuthPassword.Length != 4  || dto.MobileAppAuthcode.Length != 4 || dto.PhoneNumberAuthCode.Length != 4) 
+            if(dto.EmailAuthcode.Length != 4  || dto.AuthPassword.Length != 4  || dto.MobileAppAuthcode.Length != 4 ) 
             {
                 throw new BadRequestException("Wrong data length!");
             }
@@ -184,14 +186,14 @@ namespace MultiAuthenticationAppAPI.Services
                 if (user.AuthPassword[(letterIndex[i])-1] != dto.AuthPassword[i]) return false;
             }
 
-            if (user.EmailAuthcode == dto.EmailAuthcode && user.MobileAppAuthcode == dto.MobileAppAuthcode && user.Answer == dto.Answer && user.PhoneNumberAuthCode == dto.PhoneNumberAuthCode)
+            if (user.EmailAuthcode == dto.EmailAuthcode && user.MobileAppAuthcode == dto.MobileAppAuthcode && user.Answer == dto.Answer )
             {
                 return true;
             }
             else return false;
         }
 
-        private static string GenerateRandomNumber()
+        private static string GenerateAuthCode()
         {
             Random _rdm = new Random();
             string number = "";

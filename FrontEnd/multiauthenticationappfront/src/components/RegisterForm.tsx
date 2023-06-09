@@ -30,7 +30,6 @@ const RegisterForm = ({ Title }: Props) => {
     email: "",
     question: "car",
     answer: "",
-    phoneNumber: "",
     isError: false,
     errorMsg: "Unexpected Error, try again.",
   };
@@ -69,7 +68,6 @@ const RegisterForm = ({ Title }: Props) => {
       email,
       question,
       answer,
-      phoneNumber,
     } = values;
     e.preventDefault();
 
@@ -105,7 +103,6 @@ const RegisterForm = ({ Title }: Props) => {
         email: email,
         question: question,
         answer: answer,
-        phoneNumber: phoneNumber,
       })
     );
 
@@ -165,13 +162,6 @@ const RegisterForm = ({ Title }: Props) => {
             labelText="E-mail"
           />
           <div className="auth">
-            <SingleFormRow
-              type="text"
-              name="phoneNumber"
-              value={values.phoneNumber}
-              handleChange={handleChange}
-              labelText="Phone Number"
-            />
             <p>Authentication question</p>
             <select
               name="question"

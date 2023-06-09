@@ -9,7 +9,7 @@ import {
   Renderer,
   RollOverCube,
 } from "./threejs";
-import { getMeasurementsFromDimensions } from "../utils";
+import { getMeasurements } from "../utils";
 
 const base = 25;
 
@@ -29,7 +29,7 @@ class Scene extends React.Component<any> {
     drag: false,
     rotation: 0,
     coreObjects: [] as [],
-    isDDown: false,
+    clicked: false,
   };
 
   constructor(props: any) {
@@ -41,9 +41,9 @@ class Scene extends React.Component<any> {
   }
 
   componentDidMount() {
-    this._initCore();
+    this._initScene();
     this._initUtils();
-    this._initEnv();
+    this._initEnviroment();
 
     this._setEventListeners();
     this._start();
@@ -66,7 +66,7 @@ class Scene extends React.Component<any> {
     }
   }
 
-  _initCore() {
+  _initScene() {
     const scene = new THREE.Scene();
     this.scene = scene;
 
@@ -89,7 +89,7 @@ class Scene extends React.Component<any> {
     this.mount.appendChild(this.renderer.domElement);
   }
 
-  _initEnv() {
+  _initEnviroment() {
     const light = new Light();
     light.init();
     this.scene.add(light);
@@ -174,12 +174,12 @@ class Scene extends React.Component<any> {
   }
 
   _onMouseMove(event: any, scene: any) {
-    const { isDDown } = this.state;
+    const { clicked } = this.state;
     const { dimensions, objects } = this.props;
     event.preventDefault();
     const drag = true;
     this.setState({ drag });
-    const { width, height } = getMeasurementsFromDimensions(dimensions);
+    const { width, height } = getMeasurements(dimensions);
     const evenWidth = dimensions.x % 2 === 0;
     const evenDepth = dimensions.z % 2 === 0;
     scene.mouse.set(
@@ -193,7 +193,7 @@ class Scene extends React.Component<any> {
     );
     if (intersects.length > 0) {
       const intersect = intersects[0];
-      if (!isDDown) {
+      if (!clicked) {
         scene.rollOverCube.position
           .copy(intersect.point)
           .add(intersect.face.normal);
@@ -220,7 +220,7 @@ class Scene extends React.Component<any> {
 
   _onMouseUp(event: any, scene: any) {
     const { objects } = this.props;
-    const { drag, isDDown } = this.state;
+    const { drag, clicked } = this.state;
     if (event.target.localName !== "canvas") return;
     event.preventDefault();
     if (!drag) {
@@ -237,7 +237,7 @@ class Scene extends React.Component<any> {
         const intersect = intersects[0];
 
         // delete cube
-        if (isDDown) {
+        if (clicked) {
           this._deleteCube(intersect);
         }
         // create cube
@@ -251,7 +251,7 @@ class Scene extends React.Component<any> {
   _createCube(intersect: any, rollOverCube: any) {
     const { cubeColor, dimensions, objects, addObject } = this.props;
     let canCreate = true;
-    const { width, depth } = getMeasurementsFromDimensions(dimensions);
+    const { width, depth } = getMeasurements(dimensions);
     const cubes = objects;
     const meshBoundingBox = new THREE.Box3().setFromObject(this.rollOverCube);
     for (let i = 0; i < cubes.length; i++) {

@@ -1,6 +1,6 @@
 const base = 25;
 import * as THREE from "three";
-export function getMeasurementsFromDimensions({ x, y, z }: any) {
+export function getMeasurements({ x, y, z }: any) {
   return {
     width: base * x,
     height: base * y || (base * 2) / 1.5,

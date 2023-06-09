@@ -1,4 +1,4 @@
-import { mergeMeshes, getMeasurementsFromDimensions } from "../../utils";
+import { mergeMeshes, getMeasurements } from "../../utils";
 import * as THREE from "three";
 const base = 25;
 
@@ -25,7 +25,7 @@ export default class Cube extends THREE.Mesh {
       metalness: 0.5,
       roughness: 0.4,
     });
-    const { height, width, depth } = getMeasurementsFromDimensions(dimensions);
+    const { height, width, depth } = getMeasurements(dimensions);
     const props = createMesh(cubeMaterial, width, height, depth, dimensions);
     super(...props);
 

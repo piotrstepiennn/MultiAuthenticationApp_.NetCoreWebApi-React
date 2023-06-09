@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MultiAuthenticationAppAPI.Entities;
 
@@ -10,9 +11,10 @@ using MultiAuthenticationAppAPI.Entities;
 namespace MultiAuthenticationAppAPI.Migrations
 {
     [DbContext(typeof(UserDbContext))]
-    partial class UserDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230514182012_changeColumnMaxLength")]
+    partial class changeColumnMaxLength
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -60,6 +62,7 @@ namespace MultiAuthenticationAppAPI.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumberAuthCode")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Question")

@@ -7,6 +7,5 @@
         public string EmailAuthcode { get; set; }
         public string MobileAppAuthcode { get; set; }
         public string AuthPassword { get; set; }
-        public string PhoneNumberAuthCode { get; set; }
     }
 }

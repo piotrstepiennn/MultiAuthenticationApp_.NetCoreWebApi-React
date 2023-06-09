@@ -19,6 +19,7 @@ function App() {
         <Route path="/captcha" element={<CaptchaRedirect />} />
         <Route path="/login" element={<LoginForm Title="Login" />} />
         <Route path="/register" element={<RegisterForm Title="Register" />} />
+        <Route path="*" element={<StartPage Title="Hello" />} />
 
         <Route
           path="/auth"

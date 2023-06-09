@@ -11,7 +11,6 @@ namespace MultiAuthenticationAppAPI.Services
     }
     public class HashingService : IHashingService
     {
-        const string secretKey = "mySecretKey123";
         private readonly Secrets _secret;
 
         public HashingService(Secrets secret)

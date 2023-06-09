@@ -22,12 +22,12 @@ const Topbar = ({ grid, objects, importScene }: any) => {
   function runCaptcha() {
     const count = checkObjCount();
     if (count !== true) {
-      console.log("used incorrect number of cubes");
+      //console.log("used incorrect number of cubes");
       dispatch(updateCaptchaResult(false));
       resetScene();
       return false;
     }
-    console.log("checking cube positions...");
+    //console.log("checking cube positions...");
     const obj1 = new THREE.Group();
     for (let i = 0; i < loadedObjCount.current; i++) {
       obj1.add(objects[i]);
@@ -36,9 +36,8 @@ const Topbar = ({ grid, objects, importScene }: any) => {
     for (let i = loadedObjCount.current; i < objects.length; i++) {
       obj2.add(objects[i]);
     }
-
-    const obj1PairIndex = GetTopLeftObjectIndex(obj1);
-    const obj2PairIndex = GetTopLeftObjectIndex(obj2);
+    const obj1PairIndex = getTopLeftObjectIndex(obj1);
+    const obj2PairIndex = getTopLeftObjectIndex(obj2);
     const objectA = obj1.children[obj1PairIndex];
     const objectB = obj2.children[obj2PairIndex];
     //console.log(obj1PairIndex + "indeksy " + obj2PairIndex);
@@ -56,10 +55,9 @@ const Topbar = ({ grid, objects, importScene }: any) => {
         y: objects[i].position.y + positionDiff.y,
         z: objects[i].position.z + positionDiff.z,
       };
-
       //console.log(position);
       if (checkObjectPosition(position, loadedModel) !== true) {
-        console.log("failed test - incorrect cube arragment");
+        //console.log("failed test - incorrect cube arragment");
         dispatch(updateCaptchaResult(false));
         resetScene();
         return false;
@@ -68,7 +66,7 @@ const Topbar = ({ grid, objects, importScene }: any) => {
 
     dispatch(updateCaptchaResult(true));
     navigate("/login");
-    console.log("result - ok");
+    //console.log("result - ok");
   }
 
   function checkObjectPosition(position: any, loadedModel: any) {
@@ -107,7 +105,7 @@ const Topbar = ({ grid, objects, importScene }: any) => {
     return loadedObjCount;
   }
 
-  function GetTopLeftObjectIndex(group: any) {
+  function getTopLeftObjectIndex(group: any) {
     //console.log(group);
     let minX = 1000;
     let minZ = 1000;
