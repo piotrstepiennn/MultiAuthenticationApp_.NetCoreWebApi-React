@@ -78,10 +78,9 @@ namespace MultiAuthenticationAppAPI.Services
                 EnableSsl = true,
             };
 
-            //smtpClient.Send(message);
+            smtpClient.Send(message);
             smtpClient.Dispose();
 
-            //sending sms
 
         }
 
