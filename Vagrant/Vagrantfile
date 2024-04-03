@@ -1,0 +1,36 @@
+#gusztavvargadr/windows-server
+Vagrant.configure("2") do |config|
+    config.vm.define "frontend" do |frontend|
+        frontend.vm.box = "centos/7"
+        frontend.vm.hostname = "frontend"
+        frontend.vm.network "private_network", ip: "192.168.56.21"
+        frontend.vm.network "forwarded_port", guest: 3389, host: 33891
+        frontend.vm.provider "virtualbox" do |vb|
+            vb.memory = "2048"
+            vb.cpus = 2
+        end
+    end
+
+    config.vm.define "backend" do |backend|
+        backend.vm.box = "gusztavvargadr/windows-server"
+        backend.vm.hostname = "backend"
+        backend.vm.network "private_network", ip: "192.168.56.22"
+        backend.vm.network "forwarded_port", guest: 3389, host: 33892
+        backend.vm.provider "virtualbox" do |vb|
+            vb.memory = "4092"
+            vb.cpus = 3
+        end
+    end
+
+    config.vm.define "db01" do |db01|
+        db01.vm.box = "gusztavvargadr/windows-server"
+        db01.vm.hostname = "db01"
+        db01.vm.network "private_network", ip: "192.168.56.23"
+        db01.vm.network "forwarded_port", guest: 3389, host: 33893
+        db01.vm.provider "virtualbox" do |vb|
+            vb.memory = "4092"
+            vb.cpus = 3
+        end
+    end
+end
+        

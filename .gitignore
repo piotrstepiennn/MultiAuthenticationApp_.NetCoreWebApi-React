@@ -821,3 +821,4 @@ Directory.Build.Override.props
 
 /FrontEnd/multiauthenticationappfront/SSL/
 /FrontEnd/multiauthenticationappfront/.env
+.vagrant/
